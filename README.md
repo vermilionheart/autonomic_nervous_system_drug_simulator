@@ -16,28 +16,34 @@
 - 投与リストの作用中/終了判定の整合化
 
 ## GitHub Pages 公開手順（標準）
+> 画面に **`Upgrade or make this repository public to enable Pages`** と出る場合、原因は **このリポジトリが private のまま** で、現在のプランでは Pages を有効化できないことです。先に **public に変更** するか、**Upgrade** が必要です。
+>
+> GitHub UI: **Settings → General → Danger Zone → Change repository visibility → Make public**
+
 1. GitHub で空のリポジトリ `autonomic_nervous_system_drug_simulator` を作成する
-2. この ZIP を展開する
-3. 展開したフォルダで以下を実行する
+2. 必要なら先にそのリポジトリを **public** に変更する
+3. この ZIP を展開する
+4. 展開したフォルダで以下を実行する
 
 ```bash
 git remote set-url origin https://github.com/vermilionheart/autonomic_nervous_system_drug_simulator.git
 git push -u origin main
 ```
 
-4. GitHub の **Settings → Pages** を開く
-5. **Build and deployment** の **Source** で **Deploy from a branch** を選ぶ
-6. **Branch** を **main**、フォルダを **/(root)** にして **Save**
-7. 数十秒〜数分待つ
-8. 公開URL: `https://vermilionheart.github.io/autonomic_nervous_system_drug_simulator/`
+5. GitHub の **Settings → Pages** を開く
+6. **Build and deployment** の **Source** で **Deploy from a branch** を選ぶ
+7. **Branch** を **main**、フォルダを **/(root)** にして **Save**
+8. 数十秒〜数分待つ
+9. 公開URL: `https://vermilionheart.github.io/autonomic_nervous_system_drug_simulator/`
 
 ## GitHub Pages 公開手順（Actions を使う場合）
 このリポジトリには `.github/workflows/static.yml` を同梱しています。
 
-1. `main` に push する
-2. GitHub の **Settings → Pages** を開く
-3. **Build and deployment** の **Source** で **GitHub Actions** を選ぶ
-4. Actions 実行完了後、同じURLで公開される
+1. 先にリポジトリを **public** にする（または **Upgrade** する）
+2. `main` に push する
+3. GitHub の **Settings → Pages** を開く
+4. **Build and deployment** の **Source** で **GitHub Actions** を選ぶ
+5. Actions 実行完了後、同じURLで公開される
 
 公開URL:
 - `https://vermilionheart.github.io/autonomic_nervous_system_drug_simulator/`
