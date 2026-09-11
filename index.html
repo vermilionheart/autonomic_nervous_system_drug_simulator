@@ -92,6 +92,9 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   .btn-reset{background:#eef0f3;color:var(--text)}
   .btn-speed{background:#fff;border:1px solid var(--line);color:var(--text);padding:6px 12px;font-size:.8rem}
   .btn-speed.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .speed-group{display:flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid #d7e2ee;border-radius:999px;background:#f7fbff}
+  .speed-label{font-size:.78rem;color:#5a6a78;font-weight:700;letter-spacing:.02em}
+  .speed-buttons{display:flex;gap:6px;flex-wrap:wrap}
   .timebox{font-size:1.1rem;font-weight:bold;margin-left:auto;white-space:nowrap}
   .progress{height:6px;background:#eef0f3;border-radius:3px;overflow:hidden;margin:6px 0 0}
   .progress>div{height:100%;background:var(--accent);width:0%}
@@ -204,19 +207,27 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
         <input type="range" id="monitorVolume" min="0" max="100" value="40">
         <output id="monitorVolumeOut">40%</output>
       </div>
-      <span style="font-size:.8rem;color:#5a6a78">速度</span>
-      <button class="btn-speed" data-speed-idx="0">0.05x</button>
-      <button class="btn-speed" data-speed-idx="1">0.1x</button>
-      <button class="btn-speed" data-speed-idx="2">0.25x</button>
-      <button class="btn-speed" data-speed-idx="3">0.5x</button>
-      <button class="btn-speed active" data-speed-idx="4">1x</button>
-      <button class="btn-speed" data-speed-idx="5">1.5x</button>
-      <button class="btn-speed" data-speed-idx="6">2x</button>
-      <button class="btn-speed" data-speed-idx="7">4x</button>
+      <div class="speed-group">
+        <span class="speed-label">速度</span>
+        <div class="speed-buttons">
+          <button class="btn-speed active" data-speed-idx="0">1x</button>
+          <button class="btn-speed" data-speed-idx="1">4x</button>
+          <button class="btn-speed" data-speed-idx="2">10x</button>
+          <button class="btn-speed" data-speed-idx="3">30x</button>
+        </div>
+      </div>
+      <button class="btn-zoom" id="btnNextPhase" type="button" title="次の薬効相へジャンプ">次相へ</button>
+      <label style="font-size:.78rem;color:#5a6a78;display:flex;align-items:center;gap:4px"><input type="checkbox" id="teachingMode"> 教育モード</label>
       <span class="timebox" id="timeBox">0.0 秒</span>
     </div>
+    <div class="note" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+      <span>表示時刻</span>
+      <input type="range" id="simScrub" min="0" max="300" step="0.5" value="0" style="flex:1;min-width:220px">
+      <output id="simScrubOut">0.0 秒</output>
+      <span id="phaseLabel" style="font-weight:700;color:#2f6fbf">相: ベースライン</span>
+    </div>
     <div class="progress" style="display:none"><div id="progBar"></div></div>
-    <div class="note" style="margin-top:8px">グラフは直近120秒を自動スクロール表示。点線＋ラベル＝投与タイミング。</div>
+    <div class="note" style="margin-top:8px">グラフは直近120秒を自動スクロール表示。4x/10x/30x・次相へ・スクラブで壁時計時間だけを短縮できます。</div>
     <div class="note">モニター音は初期OFFです。クリックで有効化すると、HRに同期したビープ音が鳴り、HR=0では持続音へ自動切替します。</div>
   </div>
 
@@ -344,20 +355,20 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 
 /* ---- 薬物データモデル（onset/peak/dur は秒） ---- */
 const DRUGS = {
-  Adr: { name:'アドレナリン', mech:'α1,β1刺激(速・鋭い昇圧) → β2血管拡張(遅・長く持続：α1消退後に血圧がベースライン下に落ち込む)', onset:5, peak:30, dur:180, sbp:[40,60], dbp:[10,20], hr:[40,60], rr:[-5,0],
-         late:{ onset:60, peak:180, dur:600, sbp:[-12,-18], dbp:[-6,-10], hr:[0,5], rr:[0,0] } },
+  Adr: { name:'アドレナリン', mech:'α1主体の速い昇圧＋圧反射性徐脈 → 2–4分以内にβ2血管拡張とβ1頻脈が前景化する短時間型', onset:5, peak:30, dur:120, sbp:[40,60], dbp:[10,20], hr:[6,14], rr:[-5,0],
+         late:{ onset:120, peak:180, dur:300, sbp:[-12,-18], dbp:[-6,-10], hr:[12,20], rr:[0,0] } },
   NA:  { name:'ノルアドレナリン', mech:'α1主体・β1弱', onset:5, peak:30, dur:300, sbp:[40,60], dbp:[30,50], hr:[-40,-20], rr:[0,0] },
   Coc: { name:'コカイン', mech:'NE・DA再取込み阻害＋Na+チャネル遮断', onset:30, peak:120, dur:600, sbp:[12,20], dbp:[6,12], hr:[8,16], rr:[0,0], tone:{vagal:0, symp:0.25} },
   Ach: { name:'アセチルコリン', mech:'ムスカリン＋節N刺激（二相性）', onset:2, peak:10, dur:30, sbp:[-50,-30], dbp:[-40,-20], hr:[-50,-30], rr:[5,15], nic:{sbp:[12,20], dbp:[4,8], hr:[8,15], rr:[0,0]} },
-  Phy: { name:'フィゾスチグミン', mech:'コリンエステラーゼ阻害（間接型副交感神経刺激）', onset:30, peak:120, dur:300, sbp:[-6,-2], dbp:[-5,-2], hr:[-10,-4], rr:[0,0], tone:{vagal:0.8, symp:0} },
+  Phy: { name:'フィゾスチグミン', mech:'コリンエステラーゼ阻害（間接型副交感神経刺激）', onset:180, peak:600, dur:1800, sbp:[-6,-2], dbp:[-5,-2], hr:[-10,-4], rr:[0,0], tone:{vagal:0.8, symp:0} },
   Atr: { name:'アトロピン', mech:'ムスカリン遮断', onset:10, peak:60, dur:300, sbp:[0,3], dbp:[0,0], hr:[10,20], rr:[0,0] },
   Nic: { name:'ニコチン', mech:'節N刺激→遮断(二相性)：第1相=神経性(節後交感/速い/鋭い)・第2相=副腎性(髄質カテコラミン/遅い/持続)', onset:5, peak:15, dur:40, sbp:[30,45], dbp:[18,28], hr:[20,35], rr:[5,15],
          late:{ onset:25, peak:90, dur:360, sbp:[22,34], dbp:[12,18], hr:[12,20], rr:[0,0] } },
   Hex: { name:'ヘキサメトニウム', mech:'神経節遮断（交感・副交感トーン除去。反射性頻脈は起こさない前提で、HRの直接上昇成分は持たせない）', onset:10, peak:60, dur:180, sbp:[-10,-5], dbp:[-8,-4], hr:[0,0], rr:[0,0], tone:{vagal:-1, symp:-1} },
-  Phe: { name:'フェントラミン', mech:'α受容体遮断', onset:10, peak:60, dur:180, sbp:[-20,-10], dbp:[-10,0], hr:[5,10], rr:[0,0] },
+  Phe: { name:'フェントラミン', mech:'α受容体遮断', onset:10, peak:120, dur:900, sbp:[-20,-10], dbp:[-10,0], hr:[5,10], rr:[0,0] },
   Iso: { name:'イソプロテレノール', mech:'β1,β2刺激（β2拡張でSBPほぼ不変・脈圧拡大）', onset:5, peak:30, dur:90, sbp:[-4,4], dbp:[-30,-20], hr:[40,60], rr:[0,0] },
   Pro: { name:'プロプラノロール', mech:'β受容体遮断（心臓交感トーン除去）', onset:10, peak:60, dur:180, sbp:[0,0], dbp:[0,0], hr:[-10,-5], rr:[0,0], tone:{vagal:0, symp:-0.6} },
-  Eph: { name:'エフェドリン塩酸塩', mech:'間接型交感神経刺激（NA遊離＋弱い直接刺激）・反復投与でタキフィラキシー（減衰率はモデル仮定）', onset:5, peak:180, dur:600, sbp:[18,28], dbp:[10,16], hr:[8,18], rr:[0,0], tone:{vagal:0, symp:0.5} },
+  Eph: { name:'エフェドリン塩酸塩', mech:'間接型交感神経刺激（NA遊離＋弱い直接刺激）・反復投与でタキフィラキシー（減衰率はモデル仮定）', onset:5, peak:180, dur:3600, sbp:[18,28], dbp:[10,16], hr:[8,18], rr:[0,0], tone:{vagal:0, symp:0.5} },
   His: { name:'ヒスタミン', mech:'H1受容体刺激', onset:5, peak:20, dur:60, sbp:[-12,-4], dbp:[-30,-20], hr:[15,25], rr:[10,20] }
 };
 /* ---- 薬物ごとのグラフ識別色（投与マーカー・ログ・効果線に使用） ---- */
@@ -586,6 +597,7 @@ function computeValues(t, baseline, events){
     const n = Number.isFinite(v) ? v : 0;
     return Math.min(hi, Math.max(0, n));
   };
+  const baselineMap = Number.isFinite(baseline.map) ? baseline.map : (baseline.dbp + (baseline.sbp-baseline.dbp)/3);
   const couplePressureToHeart = (sbp, dbp, hr, rr)=>{
     sbp = clampNonNegative(sbp, 400);
     dbp = clampNonNegative(dbp, 250);
@@ -598,6 +610,16 @@ function computeValues(t, baseline, events){
     // ほぼ無灌流なら心拍・呼吸とも停止扱い
     if(sbp <= 5 || map <= 5){
       return {sbp:0, dbp:0, map:0, hr:0, rr:0, respState:'apnea'};
+    }
+
+    // 高圧相では圧受容器反射で一過性徐脈、圧低下時はその抑制を解除してβ1頻脈を見せる
+    const pressorExcess = Math.max(0, map - baselineMap);
+    if(pressorExcess > 0.5){
+      const reflexBrady = Math.min(Math.max(18, baseline.hr * 0.45), pressorExcess * 0.95);
+      hr = Math.max(25, hr - reflexBrady);
+    }else if(map < baselineMap - 4){
+      const reflexRelease = Math.min(Math.max(8, baseline.hr * 0.22), (baselineMap - map) * 0.35);
+      hr += reflexRelease;
     }
 
     // 灌流の程度に応じて HR / RR を同じ状態遷移で制御
@@ -688,9 +710,12 @@ const WINDOW = 120;               // デフォルト表示ウィンドウ（秒�
 let viewStart = 0, viewEnd = WINDOW; // 3グラフ共通のタイムライン表示範囲（ズーム/パン用）
 let userInteracted = false;       // ユーザーがズーム/パン操作したら true（自動追従を停止）
 let autoFollow = true;            // true 時、シミュレーション進行に合わせて自動スクロール
-const SPEEDS = [0.05, 0.1, 0.25, 0.5, 1, 1.5, 2, 4]; // シミュ秒/実秒（1x=リアルタイム、4x=最大）
-let speedIdx = 4;
+const SPEEDS = [1, 4, 10, 30]; // シミュ秒/実秒（固定dtで積分し、壁時計時間だけを圧縮）
+let speedIdx = 0;
 let speed = SPEEDS[speedIdx];
+const REDRAW_DT_REAL = 1/24;      // 高速時も再描画負荷で固まらないよう壁時計側を間引く
+const MAX_SUBSTEPS_PER_FRAME = 240;
+let redrawDebt = 0;
 const data = { times:[], sbp:[], dbp:[], map:[], hr:[], rr:[], contrib:{} };
 const stats = {};
 
@@ -714,6 +739,117 @@ function updateStats(v, t){
     const dev = Math.abs(v[k] - baseline[k]);
     if(dev > stats[k].maxDev){ stats[k].maxDev = dev; stats[k].peak = v[k]; stats[k].peakTime = t; }
   });
+}
+function trimData(){
+  const MAX_POINTS = 24000;
+  const KEEP_RECENT = 8000;
+  if(data.times.length <= MAX_POINTS) return;
+  const olderCount = Math.max(0, data.times.length - KEEP_RECENT);
+  const targetOlder = Math.max(1, MAX_POINTS - KEEP_RECENT);
+  const stride = Math.max(2, Math.ceil(olderCount / targetOlder));
+  const keepIdx = [];
+  for(let i=0; i<olderCount; i+=stride) keepIdx.push(i);
+  for(let i=olderCount; i<data.times.length; i++) keepIdx.push(i);
+  data.times = keepIdx.map(i=>data.times[i]);
+  ['sbp','dbp','map','hr','rr'].forEach(k=>{ data[k] = keepIdx.map(i=>data[k][i]); });
+  const keptTimes = new Set(data.times.map(t=>+t.toFixed(4)));
+  Object.keys(data.contrib).forEach(t=>{ if(!keptTimes.has(+t)) delete data.contrib[t]; });
+}
+function sampleUntil(targetTime){
+  targetTime = Math.max(0, Number.isFinite(targetTime) ? targetTime : 0);
+  while(nextSample <= targetTime + 1e-9){
+    const v = computeValues(nextSample, baseline, events);
+    const safe = {};
+    ['sbp','dbp','map','hr','rr'].forEach(k=>{ safe[k] = Number.isFinite(v[k]) ? v[k] : 0; });
+    data.times.push(nextSample);
+    data.sbp.push(Math.round(safe.sbp*10)/10);
+    data.dbp.push(Math.round(safe.dbp*10)/10);
+    data.map.push(Math.round(safe.map*10)/10);
+    data.hr.push(Math.round(safe.hr*10)/10);
+    data.rr.push(Math.round(safe.rr*10)/10);
+    updateStats(safe, nextSample);
+    data.contrib[+nextSample.toFixed(4)] = contribOf(nextSample);
+    nextSample = +(nextSample + SAMPLE_DT).toFixed(6);
+  }
+  trimData();
+}
+function getSimHorizon(){
+  const eventTail = events.reduce((m, ev)=>Math.max(m, ev.t0 + evEnd(ev) + 60), 0);
+  const furthest = Math.max(300, WINDOW, simTime, nextSample, eventTail);
+  return Math.ceil((furthest + 30) / 30) * 30;
+}
+function getPhaseMarkers(){
+  const marks = [{t:0, label:'ベースライン'}];
+  events.forEach(ev=>{
+    const pts = [
+      [ev.t0, ev.drug + ' 投与'],
+      [ev.t0 + ev.onset, ev.drug + ' 立ち上がり'],
+      [ev.t0 + ev.peak, ev.drug + ' 主相ピーク'],
+      [ev.t0 + ev.dur, ev.drug + ' 主相終了']
+    ];
+    if(ev.late){
+      pts.push(
+        [ev.t0 + ev.late.onset, ev.drug + ' 遅延相開始'],
+        [ev.t0 + ev.late.peak, ev.drug + ' 遅延相ピーク'],
+        [ev.t0 + ev.late.dur, ev.drug + ' 遅延相終了']
+      );
+    }
+    pts.forEach(([t,label])=>{ if(Number.isFinite(t) && t >= 0) marks.push({t:+t.toFixed(1), label}); });
+  });
+  marks.sort((a,b)=>a.t-b.t);
+  const merged = [];
+  for(const m of marks){
+    const last = merged[merged.length-1];
+    if(last && Math.abs(last.t - m.t) < 0.25){
+      if(!last.label.includes(m.label)) last.label += ' / ' + m.label;
+    }else{
+      merged.push({...m});
+    }
+  }
+  return merged;
+}
+function describePhaseAt(t){
+  const marks = getPhaseMarkers();
+  let current = marks[0] || {t:0,label:'ベースライン'};
+  let upcoming = null;
+  for(const m of marks){
+    if(m.t <= t + 1e-9) current = m;
+    else { upcoming = m; break; }
+  }
+  return upcoming ? current.label + ' → 次: ' + upcoming.label + ' @' + upcoming.t.toFixed(1) + 's' : current.label;
+}
+function syncScrubber(force){
+  const scrub = document.getElementById('simScrub');
+  const out = document.getElementById('simScrubOut');
+  const phase = document.getElementById('phaseLabel');
+  const nextBtn = document.getElementById('btnNextPhase');
+  const maxT = getSimHorizon();
+  if(scrub){
+    scrub.max = String(maxT);
+    if(force || document.activeElement !== scrub) scrub.value = String(Math.min(maxT, Math.max(0, simTime)));
+  }
+  if(out) out.textContent = simTime.toFixed(1) + ' 秒';
+  if(phase) phase.textContent = '相: ' + describePhaseAt(simTime);
+  const nextPhase = getPhaseMarkers().find(m => m.t > simTime + 1e-9);
+  if(nextBtn){
+    nextBtn.disabled = !nextPhase;
+    nextBtn.title = nextPhase ? ('次の薬効相へジャンプ: ' + nextPhase.label + ' (t=' + nextPhase.t.toFixed(1) + 's)') : 'これ以降の相はありません';
+  }
+}
+function jumpToSimTime(targetTime, preserveFollow=false){
+  targetTime = Math.max(0, Number.isFinite(targetTime) ? targetTime : 0);
+  sampleUntil(targetTime);
+  simTime = targetTime;
+  lastFrame = performance.now();
+  redrawDebt = 0;
+  if(!preserveFollow){ autoFollow = false; userInteracted = true; }
+  updateCharts();
+  updateTime();
+  if(MONITOR_SOUND.enabled) updateMonitorSound();
+}
+function jumpToNextPhase(){
+  const nextPhase = getPhaseMarkers().find(m => m.t > simTime + 1e-9);
+  if(nextPhase) jumpToSimTime(nextPhase.t);
 }
 
 /* ベースライン・時間スライダー連動 */
@@ -1298,41 +1434,47 @@ function logPush(drug, t, doseLabel, mod){
 function start(){
   running = true;
   lastFrame = performance.now();
+  redrawDebt = 0;
   setControls();
   requestAnimationFrame(loop);
 }
 function pause(){ running = false; setControls(); }
 function toggle(){ running ? pause() : start(); }
+function advanceByFrame(frameAdvance){
+  frameAdvance = Math.max(0, Number.isFinite(frameAdvance) ? frameAdvance : 0);
+  const teachMode = document.getElementById('teachingMode');
+  const requested = Math.max(1, Math.ceil(speed));
+  const substeps = Math.min(MAX_SUBSTEPS_PER_FRAME, requested);
+  const simStep = frameAdvance / substeps;
+  let phaseStop = null;
+  for(let i=0; i<substeps; i++){
+    const prevTime = simTime;
+    let targetTime = +(simTime + simStep).toFixed(6);
+    if(!Number.isFinite(targetTime)) break;
+    const stop = (teachMode && teachMode.checked)
+      ? getPhaseMarkers().find(m => m.t > prevTime + 1e-9 && m.t <= targetTime + 1e-9)
+      : null;
+    if(stop){ targetTime = stop.t; phaseStop = stop; }
+    simTime = targetTime;
+    sampleUntil(simTime);
+    if(phaseStop) break;
+  }
+  return phaseStop;
+}
 
 function loop(now){
   if(!running) return;
-  const dtReal = Math.min((now-lastFrame)/1000, 0.1);
+  const rawDt = (now-lastFrame)/1000;
+  const dtReal = Math.min(Math.max(0, Number.isFinite(rawDt) ? rawDt : 0), 0.1);
   lastFrame = now;
-  simTime += dtReal*speed;
-  while(nextSample <= simTime){
-    const v = computeValues(nextSample, baseline, events);
-    data.times.push(nextSample);
-    data.sbp.push(Math.round(v.sbp*10)/10);
-    data.dbp.push(Math.round(v.dbp*10)/10);
-    data.map.push(Math.round(v.map*10)/10);
-    data.hr.push(Math.round(v.hr*10)/10);
-    data.rr.push(Math.round(v.rr*10)/10);
-    updateStats(v, nextSample);
-    // 各薬物の効果寄与（重ね合わせの内訳：薬物別に色分け表示するため）
-    data.contrib[nextSample] = contribOf(nextSample);
-    nextSample += SAMPLE_DT;
+  const phaseStop = advanceByFrame(dtReal * speed);
+  redrawDebt += dtReal;
+  if(redrawDebt >= REDRAW_DT_REAL || phaseStop){
+    redrawDebt = 0;
+    updateCharts();
+    updateTime();
   }
-  // 長時間実行のメモリ安定化：保持点数を上限で間引き（古い点を破棄、X軸は自動スクロール）
-  const MAX_POINTS = 20000;
-  if(data.times.length > MAX_POINTS){
-    const drop = data.times.length - MAX_POINTS;
-    data.times.splice(0, drop);
-    ['sbp','dbp','map','hr','rr'].forEach(k=>data[k].splice(0, drop));
-    const dropT = data.times[0];
-    Object.keys(data.contrib).forEach(t=>{ if(+t < dropT) delete data.contrib[t]; });
-  }
-  updateCharts();
-  updateTime();
+  if(phaseStop){ pause(); return; }
   if(running) requestAnimationFrame(loop); else setControls();
 }
 
@@ -1377,6 +1519,7 @@ function updateCharts(){
   chartRR.update('none');
   updateViewRange();
   updateReadoutsByTime(simTime);
+  syncScrubber();
 }
 
 /* ベースライン参照線は無効化（ユーザー要望により破線を非表示） */
@@ -1794,6 +1937,7 @@ function updateTime(){
   document.getElementById('timeBox').textContent = simTime.toFixed(1)+' 秒';
   statusBadge();
   renderTable();
+  syncScrubber();
 }
 
 function renderTable(){
@@ -1814,7 +1958,7 @@ function renderTable(){
 
 /* ---- リセット ---- */
 function resetSim(keepDrugs){
-  events=[]; markers=[]; simTime=0; nextSample=0; running=false;
+  events=[]; markers=[]; simTime=0; nextSample=0; running=false; redrawDebt=0;
   resetMonitorEngine(MONITOR_SOUND.enabled);
   _statusState = 'ok';
   data.times.length=0;
@@ -1841,6 +1985,7 @@ function resetSim(keepDrugs){
   document.getElementById('timeBox').textContent='0.0 秒';
   renderTable();
   renderSchedList();
+  syncScrubber(true);
   if(!keepDrugs){
     document.getElementById('logBox').innerHTML='<div class="row" style="color:#aab4bf">（未投与）</div>';
   }
@@ -1883,6 +2028,20 @@ document.querySelectorAll('.btn-speed').forEach(b=>{
     document.querySelectorAll('.btn-speed').forEach(x=>x.classList.toggle('active', x===b));
   });
 });
+const scrub = document.getElementById('simScrub');
+if(scrub){
+  scrub.addEventListener('input', ()=>{
+    if(running) pause();
+    jumpToSimTime(+scrub.value);
+  });
+}
+const nextPhaseBtn = document.getElementById('btnNextPhase');
+if(nextPhaseBtn){
+  nextPhaseBtn.addEventListener('click', ()=>{
+    if(running) pause();
+    jumpToNextPhase();
+  });
+}
 /* ---- ズームコントロール ---- */
 document.getElementById('zoomIn').addEventListener('click', ()=>{ zoomBy(0.5); });
 document.getElementById('zoomOut').addEventListener('click', ()=>{ zoomBy(2.0); });
@@ -1976,6 +2135,7 @@ setControls();
 renderSchedList();
 syncDoseUI();
 updateViewRange();
+syncScrubber(true);
 const demoMode = new URLSearchParams(location.search).get('demo');
 if(demoMode === 'asystole'){
   const pairs = [['bSBP','oSBP'],['bDBP','oDBP'],['bHR','oHR'],['bRR','oRR']];
