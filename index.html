@@ -151,6 +151,17 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   .status-badge.ok{background:#27ae60}
   .status-badge.active{background:#e67e22}
   .status-badge.rec{background:#3498db}
+  .status-badge.asystole{background:#c0392b}
+  .monitor-audio{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .monitor-audio label{font-size:.78rem;color:#5a6a78;font-weight:700}
+  .monitor-audio input[type=range]{width:140px}
+  .monitor-audio output{min-width:42px;text-align:right;font-variant-numeric:tabular-nums;color:#c0392b;font-weight:700}
+  .alarm-banner{display:none;align-items:center;justify-content:center;gap:10px;margin:0 0 10px;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#5a0a0a,#a51212);color:#fff;font-weight:800;letter-spacing:.08em;box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 8px 24px rgba(165,18,18,.35)}
+  .alarm-banner small{font-size:.78rem;font-weight:700;letter-spacing:.04em;opacity:.9}
+  body.alarm-asystole{background:#fff2f2}
+  body.alarm-asystole .alarm-banner{display:flex;animation:asystolePulse .95s ease-in-out infinite}
+  body.alarm-asystole .graph-status{filter:drop-shadow(0 0 10px rgba(192,57,43,.35))}
+  @keyframes asystolePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.985)}}
 </style>
 </head>
 <body>
@@ -164,12 +175,12 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     <h2>生理学的ベースライン（安定時値）</h2>
     <div class="grid2">
       <div>
-        <div class="slider-row"><label>収縮期血圧 SBP</label><input type="range" id="bSBP" min="60" max="200" value="120"><output id="oSBP">120</output><span class="badge">mmHg</span></div>
-        <div class="slider-row"><label>拡張期血圧 DBP</label><input type="range" id="bDBP" min="40" max="140" value="80"><output id="oDBP">80</output><span class="badge">mmHg</span></div>
+        <div class="slider-row"><label>収縮期血圧 SBP</label><input type="range" id="bSBP" min="0" max="200" value="120"><output id="oSBP">120</output><span class="badge">mmHg</span></div>
+        <div class="slider-row"><label>拡張期血圧 DBP</label><input type="range" id="bDBP" min="0" max="140" value="80"><output id="oDBP">80</output><span class="badge">mmHg</span></div>
       </div>
       <div>
-        <div class="slider-row"><label>心拍数 HR</label><input type="range" id="bHR" min="40" max="160" value="70"><output id="oHR">70</output><span class="badge">回/分</span></div>
-        <div class="slider-row"><label>呼吸数 RR</label><input type="range" id="bRR" min="8" max="40" value="16"><output id="oRR">16</output><span class="badge">回/分</span></div>
+        <div class="slider-row"><label>心拍数 HR</label><input type="range" id="bHR" min="0" max="160" value="70"><output id="oHR">70</output><span class="badge">回/分</span></div>
+        <div class="slider-row"><label>呼吸数 RR</label><input type="range" id="bRR" min="0" max="40" value="16"><output id="oRR">16</output><span class="badge">回/分</span></div>
       </div>
     </div>
     <div class="slider-row" style="margin-top:8px">
@@ -186,7 +197,13 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     <h2>シミュレーション制御</h2>
     <div class="ctrl-top">
       <button class="btn-run" id="btnRun">▶ 開始</button>
-      <button class="btn-reset" id="btnReset">リセット</button>
+      <button class="btn-reset" id="btnReset">リセット / 蘇生</button>
+      <div class="monitor-audio">
+        <button class="btn-zoom" id="btnMonitorSound" type="button" aria-pressed="false">🔇 モニター音OFF</button>
+        <label for="monitorVolume">音量</label>
+        <input type="range" id="monitorVolume" min="0" max="100" value="40">
+        <output id="monitorVolumeOut">40%</output>
+      </div>
       <span style="font-size:.8rem;color:#5a6a78">速度</span>
       <button class="btn-speed" data-speed-idx="0">0.05x</button>
       <button class="btn-speed" data-speed-idx="1">0.1x</button>
@@ -200,6 +217,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     </div>
     <div class="progress" style="display:none"><div id="progBar"></div></div>
     <div class="note" style="margin-top:8px">グラフは直近120秒を自動スクロール表示。点線＋ラベル＝投与タイミング。</div>
+    <div class="note">モニター音は初期OFFです。クリックで有効化すると、HRに同期したビープ音が鳴り、HR=0では持続音へ自動切替します。</div>
   </div>
 
   <!-- タイムライン投与 -->
@@ -258,6 +276,7 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       <div class="live-big-item" style="--c:#27ae60"><span class="lb-label">呼吸数 RR</span><span class="lb-val" id="bigRR">--</span><span class="lb-unit">回/分</span></div>
     </div>
     <div class="charts-vert">
+      <div class="alarm-banner" id="alarmBanner"><span>🚨 ASYSTOLE</span><small>HR 0 / 心停止アラーム</small></div>
       <div class="graph-status"><span class="status-badge ok" id="statusBadge" style="display:none">正常</span></div>
       <div class="chart-box"><canvas id="cBP"></canvas>
         <div class="live-readout" id="roBP"><span class="live-cursor" id="roBPc">t=0s</span><span id="roBPv">--</span><span class="live-unit">mmHg (MAP)</span></div>
@@ -334,7 +353,7 @@ const DRUGS = {
   Atr: { name:'アトロピン', mech:'ムスカリン遮断', onset:10, peak:60, dur:300, sbp:[0,3], dbp:[0,0], hr:[10,20], rr:[0,0] },
   Nic: { name:'ニコチン', mech:'節N刺激→遮断(二相性)：第1相=神経性(節後交感/速い/鋭い)・第2相=副腎性(髄質カテコラミン/遅い/持続)', onset:5, peak:15, dur:40, sbp:[30,45], dbp:[18,28], hr:[20,35], rr:[5,15],
          late:{ onset:25, peak:90, dur:360, sbp:[22,34], dbp:[12,18], hr:[12,20], rr:[0,0] } },
-  Hex: { name:'ヘキサメトニウム', mech:'神経節遮断（交感・副交感トーン除去）', onset:10, peak:60, dur:180, sbp:[-10,-5], dbp:[-8,-4], hr:[0,4], rr:[0,0], tone:{vagal:-1, symp:-1} },
+  Hex: { name:'ヘキサメトニウム', mech:'神経節遮断（交感・副交感トーン除去。反射性頻脈は起こさない前提で、HRの直接上昇成分は持たせない）', onset:10, peak:60, dur:180, sbp:[-10,-5], dbp:[-8,-4], hr:[0,0], rr:[0,0], tone:{vagal:-1, symp:-1} },
   Phe: { name:'フェントラミン', mech:'α受容体遮断', onset:10, peak:60, dur:180, sbp:[-20,-10], dbp:[-10,0], hr:[5,10], rr:[0,0] },
   Iso: { name:'イソプロテレノール', mech:'β1,β2刺激（β2拡張でSBPほぼ不変・脈圧拡大）', onset:5, peak:30, dur:90, sbp:[-4,4], dbp:[-30,-20], hr:[40,60], rr:[0,0] },
   Pro: { name:'プロプラノロール', mech:'β受容体遮断（心臓交感トーン除去）', onset:10, peak:60, dur:180, sbp:[0,0], dbp:[0,0], hr:[-10,-5], rr:[0,0], tone:{vagal:0, symp:-0.6} },
@@ -563,6 +582,45 @@ function collectModifiers(drug, events, now){
 
 /* ---- 時刻tの各パラメータ平均値を計算（重ね合わせ＋クランプ） ---- */
 function computeValues(t, baseline, events){
+  const clampNonNegative = (v, hi)=>{
+    const n = Number.isFinite(v) ? v : 0;
+    return Math.min(hi, Math.max(0, n));
+  };
+  const couplePressureToHeart = (sbp, dbp, hr, rr)=>{
+    sbp = clampNonNegative(sbp, 400);
+    dbp = clampNonNegative(dbp, 250);
+    hr  = clampNonNegative(hr, 240);
+    rr  = clampNonNegative(rr, 80);
+    if(dbp > sbp) dbp = sbp;
+    let map = clampNonNegative(dbp + (sbp-dbp)/3, 400);
+    let respState = 'normal';
+
+    // ほぼ無灌流なら心拍・呼吸とも停止扱い
+    if(sbp <= 5 || map <= 5){
+      return {sbp:0, dbp:0, map:0, hr:0, rr:0, respState:'apnea'};
+    }
+
+    // 灌流の程度に応じて HR / RR を同じ状態遷移で制御
+    const perf = Math.max(0, Math.min(1, map / 65, sbp / 90));
+    if(map < 15 || sbp < 25){
+      hr = Math.min(hr, Math.max(6, baseline.hr * (0.18 + 0.24 * perf)));
+      rr = Math.max(2, Math.min(rr, baseline.rr * (0.20 + 0.30 * perf)));
+      respState = 'agonal';
+    }else if(map < 30 || sbp < 45){
+      hr = Math.min(hr, Math.max(12, baseline.hr * (0.30 + 0.35 * perf)));
+      rr = Math.max(4, Math.min(rr, baseline.rr * (0.45 + 0.25 * perf)));
+      respState = 'agonal';
+    }else if(map < 55 || sbp < 80){
+      hr = Math.min(hr, Math.max(28, baseline.hr * (0.55 + 0.30 * perf)));
+      rr = Math.max(rr, baseline.rr * (1.10 + 0.35 * (1 - perf)));
+      respState = 'tachypnea';
+    }
+
+    hr = clampNonNegative(hr, 240);
+    rr = clampNonNegative(rr, 80);
+    map = clampNonNegative(dbp + (sbp-dbp)/3, 400);
+    return {sbp, dbp, map, hr, rr, respState};
+  };
   let sbp=baseline.sbp, dbp=baseline.dbp, hr=baseline.hr, rr=baseline.rr;
   let vagalShift=0, sympShift=0;
   for(const ev of events){
@@ -603,17 +661,7 @@ function computeValues(t, baseline, events){
   // 圧受容器反射（HR 偏移 → SBP 補正, 機序ベースの閉ループ）
   sbp += baroreflexSBP(hr - baseline.hr);
   dbp += baroreflexSBP(hr - baseline.hr) * 0.7;
-  // 生理学的クランプ（教育的モデル：重度徐脈・無呼吸・重度低血圧を防ぐ）
-  // 生理的クランプ：臨床的致死域を含む広範囲を許容（教育目的で極端値も観察可能に）
-  // SBP上限400(従来の250)→MAP=(150+(400-150)/3=233.3)まで上昇可能、DBP上限250
-  // HR下限5(従来の20)→致死性徐脈域も観察可能
-  if(sbp<40) sbp=40; if(sbp>400) sbp=400;
-  if(dbp<20) dbp=20; if(dbp>250) dbp=250;
-  if(dbp>sbp) dbp=sbp;
-  if(hr<5) hr=5; if(hr>240) hr=240;
-  if(rr<3) rr=3; if(rr>80) rr=80;
-  const map = dbp + (sbp-dbp)/3;
-  return {sbp, dbp, map, hr, rr};
+  return couplePressureToHeart(sbp, dbp, hr, rr);
 }
 
 /* ================= 状態 ================= */
@@ -674,7 +722,7 @@ function updateStats(v, t){
   el.addEventListener('input', ()=>{
     o.textContent=el.value;
     // ベースライン変更を大型デジタル表示にも即時反映（未実行時）
-    if(!running){ baseline = baselineFromUI(); updateReadoutsByTime(simTime); }
+    if(!running){ baseline = baselineFromUI(); updateReadoutsByTime(simTime); statusBadge(); }
   });
 });
 
@@ -1379,18 +1427,341 @@ function updateViewRange(){
   }
 }
 
+/* ---- 生体モニター音（Web Audio API） ---- */
+const MONITOR_SOUND = {
+  enabled:false,
+  ctx:null,
+  master:null,
+  flatlineOsc:null,
+  flatlineGain:null,
+  nextBeatTime:0,
+  rafId:0,
+  mode:'off',
+  volume:0.4,
+  nodeSeq:0,
+  beepCount:0,
+  lastBeatAt:NaN,
+  lastHealthyAt:NaN,
+  recoveryPending:false,
+  log:[],
+  maxLog:400
+};
+function pushMonitorLog(type, extra={}){
+  const ctx = MONITOR_SOUND.ctx;
+  const entry = {
+    idx: MONITOR_SOUND.log.length + 1,
+    type,
+    ctxState: ctx ? ctx.state : 'none',
+    ctxTime: ctx && Number.isFinite(ctx.currentTime) ? +ctx.currentTime.toFixed(4) : null,
+    simTime: Number.isFinite(simTime) ? +simTime.toFixed(4) : null,
+    mode: MONITOR_SOUND.mode,
+    nextBeatTime: Number.isFinite(MONITOR_SOUND.nextBeatTime) ? +MONITOR_SOUND.nextBeatTime.toFixed(4) : null,
+    beepCount: MONITOR_SOUND.beepCount,
+    recoveryPending: !!MONITOR_SOUND.recoveryPending,
+    ...extra
+  };
+  MONITOR_SOUND.log.push(entry);
+  if(MONITOR_SOUND.log.length > MONITOR_SOUND.maxLog) MONITOR_SOUND.log.splice(0, MONITOR_SOUND.log.length - MONITOR_SOUND.maxLog);
+  try{ window.MONITOR_DEBUG_LOG = MONITOR_SOUND.log; }catch(_e){}
+  return entry;
+}
+function applyMonitorVolume(){
+  const vol = Math.max(0, Math.min(1, Number.isFinite(MONITOR_SOUND.volume) ? MONITOR_SOUND.volume : 0.4));
+  const out = document.getElementById('monitorVolumeOut');
+  if(out) out.textContent = Math.round(vol * 100) + '%';
+  if(MONITOR_SOUND.master && MONITOR_SOUND.ctx){
+    const t = MONITOR_SOUND.ctx.currentTime;
+    const target = vol * 0.18;
+    try{ MONITOR_SOUND.master.gain.cancelScheduledValues(t); }catch(_e){}
+    MONITOR_SOUND.master.gain.setValueAtTime(Math.max(MONITOR_SOUND.master.gain.value || 0, 0), t);
+    if(target <= 0){
+      MONITOR_SOUND.master.gain.setValueAtTime(0, t);
+      pushMonitorLog('volume', {target:0});
+      return;
+    }
+    MONITOR_SOUND.master.gain.linearRampToValueAtTime(target, t + 0.02);
+  }
+}
+function ensureMonitorAudio(){
+  if(!MONITOR_SOUND.ctx){
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return null;
+    MONITOR_SOUND.ctx = new Ctx();
+    pushMonitorLog('ctx-create');
+  }
+  const ctx = MONITOR_SOUND.ctx;
+  if(!MONITOR_SOUND.master){
+    const master = ctx.createGain();
+    master.gain.value = 0.0001;
+    master.connect(ctx.destination);
+    MONITOR_SOUND.master = master;
+    pushMonitorLog('master-create');
+  }
+  applyMonitorVolume();
+  return ctx;
+}
+function stopFlatlineTone(reason='stop-flatline'){
+  if(MONITOR_SOUND.flatlineGain && MONITOR_SOUND.ctx){
+    const t = MONITOR_SOUND.ctx.currentTime;
+    try{ MONITOR_SOUND.flatlineGain.gain.cancelScheduledValues(t); }catch(_e){}
+    try{ MONITOR_SOUND.flatlineGain.gain.setValueAtTime(Math.max(MONITOR_SOUND.flatlineGain.gain.value || 0.0001, 0.0001), t); }catch(_e){}
+    try{ MONITOR_SOUND.flatlineGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.02); }catch(_e){}
+  }
+  if(MONITOR_SOUND.flatlineOsc){
+    try{ MONITOR_SOUND.flatlineOsc.stop((MONITOR_SOUND.ctx ? MONITOR_SOUND.ctx.currentTime : 0) + 0.03); }catch(_e){}
+    try{ MONITOR_SOUND.flatlineOsc.disconnect(); }catch(_e){}
+    MONITOR_SOUND.flatlineOsc = null;
+  }
+  if(MONITOR_SOUND.flatlineGain){
+    try{ MONITOR_SOUND.flatlineGain.disconnect(); }catch(_e){}
+    MONITOR_SOUND.flatlineGain = null;
+  }
+  pushMonitorLog(reason);
+}
+function resetMonitorSchedule(reason, keepEnabled){
+  if(MONITOR_SOUND.master && MONITOR_SOUND.ctx){
+    const t = MONITOR_SOUND.ctx.currentTime;
+    try{ MONITOR_SOUND.master.gain.cancelScheduledValues(t); }catch(_e){}
+    try{ MONITOR_SOUND.master.gain.setValueAtTime(Math.max(MONITOR_SOUND.master.gain.value || 0.0001, 0.0001), t); }catch(_e){}
+  }
+  MONITOR_SOUND.nextBeatTime = 0;
+  MONITOR_SOUND.lastBeatAt = NaN;
+  MONITOR_SOUND.recoveryPending = !!keepEnabled;
+  MONITOR_SOUND.mode = keepEnabled ? 'idle' : 'off';
+  pushMonitorLog(reason, {keepEnabled:!!keepEnabled});
+}
+function resetMonitorEngine(keepEnabled){
+  if(MONITOR_SOUND.flatlineOsc || MONITOR_SOUND.flatlineGain) stopFlatlineTone('engine-stop-flatline');
+  resetMonitorSchedule('engine-reset', keepEnabled);
+}
+function silenceMonitorSound(){
+  resetMonitorEngine(MONITOR_SOUND.enabled);
+}
+function setMonitorButton(){
+  const btn = document.getElementById('btnMonitorSound');
+  if(!btn) return;
+  btn.textContent = MONITOR_SOUND.enabled ? '🔊 モニター音ON' : '🔇 モニター音OFF';
+  btn.classList.toggle('active', MONITOR_SOUND.enabled);
+  btn.setAttribute('aria-pressed', MONITOR_SOUND.enabled ? 'true' : 'false');
+}
+function getCurrentVitalsSnapshot(){
+  try{
+    const t = Math.max(0, Number.isFinite(simTime) ? simTime : 0);
+    const v = computeValues(t, baseline, events);
+    if(v && Number.isFinite(v.hr) && Number.isFinite(v.map) && Number.isFinite(v.rr)) return v;
+  }catch(_e){}
+  const b = baseline || {sbp:0, dbp:0, map:0, hr:0, rr:0};
+  const sbp = Math.max(0, Number.isFinite(b.sbp) ? b.sbp : 0);
+  const dbp0 = Math.max(0, Number.isFinite(b.dbp) ? b.dbp : 0);
+  const dbp = Math.min(sbp, dbp0);
+  const map = Math.max(0, Number.isFinite(b.map) ? b.map : (dbp + (sbp-dbp)/3));
+  return {sbp, dbp, map, hr:Math.max(0, Number.isFinite(b.hr) ? b.hr : 0), rr:Math.max(0, Number.isFinite(b.rr) ? b.rr : 0), respState:'normal'};
+}
+function setAsystoleAlarm(active, vitals){
+  document.body.classList.toggle('alarm-asystole', !!active);
+  const banner = document.getElementById('alarmBanner');
+  if(banner){
+    const respTxt = vitals && vitals.respState === 'apnea' ? '・無呼吸' : '';
+    banner.textContent = '🚨 ASYSTOLE HR 0 / 心停止' + respTxt + 'アラーム';
+    banner.setAttribute('aria-hidden', active ? 'false' : 'true');
+  }
+}
+function isCurrentAsystole(){
+  const v = getCurrentVitalsSnapshot();
+  return !(v.hr > 0.0001 && v.map > 0.5 && v.sbp > 0.5);
+}
+function scheduleMonitorBeat(atTime, reason='regular'){
+  const ctx = MONITOR_SOUND.ctx;
+  if(!ctx || !MONITOR_SOUND.master) return false;
+  const hi = ctx.createOscillator();
+  const lo = ctx.createOscillator();
+  const hiGain = ctx.createGain();
+  const loGain = ctx.createGain();
+  const nodeId = ++MONITOR_SOUND.nodeSeq;
+  hi.type = 'square';
+  lo.type = 'triangle';
+  hi.frequency.setValueAtTime(1046, atTime);
+  lo.frequency.setValueAtTime(698, atTime + 0.012);
+  hiGain.gain.setValueAtTime(0.0001, atTime);
+  hiGain.gain.exponentialRampToValueAtTime(0.8, atTime + 0.004);
+  hiGain.gain.exponentialRampToValueAtTime(0.18, atTime + 0.05);
+  hiGain.gain.exponentialRampToValueAtTime(0.0001, atTime + 0.11);
+  loGain.gain.setValueAtTime(0.0001, atTime + 0.01);
+  loGain.gain.exponentialRampToValueAtTime(0.4, atTime + 0.018);
+  loGain.gain.exponentialRampToValueAtTime(0.08, atTime + 0.07);
+  loGain.gain.exponentialRampToValueAtTime(0.0001, atTime + 0.12);
+  hi.connect(hiGain); hiGain.connect(MONITOR_SOUND.master);
+  lo.connect(loGain); loGain.connect(MONITOR_SOUND.master);
+  hi.start(atTime); lo.start(atTime + 0.006);
+  hi.stop(atTime + 0.13); lo.stop(atTime + 0.14);
+  MONITOR_SOUND.beepCount += 1;
+  MONITOR_SOUND.lastBeatAt = atTime;
+  pushMonitorLog('beep', {reason, nodeId, atTime:+atTime.toFixed(4)});
+  return true;
+}
+function startFlatlineTone(){
+  const ctx = MONITOR_SOUND.ctx;
+  if(!ctx || !MONITOR_SOUND.master) return;
+  if(MONITOR_SOUND.flatlineOsc || MONITOR_SOUND.flatlineGain) stopFlatlineTone('flatline-rebuild');
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const nodeId = ++MONITOR_SOUND.nodeSeq;
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(920, ctx.currentTime);
+  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.65, ctx.currentTime + 0.04);
+  osc.connect(gain);
+  gain.connect(MONITOR_SOUND.master);
+  osc.start(ctx.currentTime);
+  MONITOR_SOUND.flatlineOsc = osc;
+  MONITOR_SOUND.flatlineGain = gain;
+  pushMonitorLog('flatline-start', {nodeId});
+}
+function getCurrentHRForSound(){
+  const v = getCurrentVitalsSnapshot();
+  return Math.max(0, Number.isFinite(v.hr) ? v.hr : 0);
+}
+function armImmediateRecoveryBeat(ctx, hr, reason){
+  const interval = 60 / hr;
+  const firstBeat = ctx.currentTime + 0.01;
+  const ok = scheduleMonitorBeat(firstBeat, reason);
+  MONITOR_SOUND.nextBeatTime = ok ? firstBeat + interval : ctx.currentTime + Math.max(0.3, interval);
+  MONITOR_SOUND.lastHealthyAt = ctx.currentTime;
+  MONITOR_SOUND.recoveryPending = false;
+  MONITOR_SOUND.mode = 'beep';
+  pushMonitorLog('recovery-arm', {reason, interval:+interval.toFixed(4), firstBeat:+firstBeat.toFixed(4)});
+}
+async function resumeMonitorContext(reason){
+  const ctx = ensureMonitorAudio();
+  if(!ctx) return null;
+  if(ctx.state === 'suspended'){
+    try{
+      await ctx.resume();
+      pushMonitorLog('ctx-resume', {reason});
+    }catch(_e){
+      pushMonitorLog('ctx-resume-fail', {reason});
+      return ctx;
+    }
+  }
+  return ctx;
+}
+function updateMonitorSound(){
+  if(!MONITOR_SOUND.enabled) return;
+  const ctx = ensureMonitorAudio();
+  if(!ctx || !MONITOR_SOUND.master) return;
+  if(ctx.state === 'suspended'){
+    pushMonitorLog('ctx-suspended');
+    MONITOR_SOUND.recoveryPending = true;
+    try{
+      const resumed = ctx.resume();
+      if(resumed && typeof resumed.then === 'function'){
+        resumed.then(()=>{
+          pushMonitorLog('ctx-resumed-async');
+          if(MONITOR_SOUND.enabled) updateMonitorSound();
+        }).catch(()=>{ pushMonitorLog('ctx-resume-fail', {reason:'tick'}); });
+      }
+    }catch(_e){}
+    if(ctx.state === 'suspended') return;
+    pushMonitorLog('ctx-resumed-sync');
+  }
+  applyMonitorVolume();
+  const vitals = getCurrentVitalsSnapshot();
+  const hr = Math.max(0, Number.isFinite(vitals.hr) ? vitals.hr : 0);
+  const asystole = !(vitals.map > 0.5 && vitals.sbp > 0.5 && hr > 0);
+  if(asystole){
+    MONITOR_SOUND.recoveryPending = true;
+    MONITOR_SOUND.lastHealthyAt = NaN;
+    MONITOR_SOUND.nextBeatTime = 0;
+    if(MONITOR_SOUND.mode !== 'flatline' || !MONITOR_SOUND.flatlineOsc) startFlatlineTone();
+    MONITOR_SOUND.mode = 'flatline';
+    pushMonitorLog('asystole-hold', {hr:+hr.toFixed(4), map:+vitals.map.toFixed(4), sbp:+vitals.sbp.toFixed(4)});
+    return;
+  }
+  if(MONITOR_SOUND.flatlineOsc || MONITOR_SOUND.flatlineGain) stopFlatlineTone('recovery-stop-flatline');
+  const interval = 60 / hr;
+  if(!Number.isFinite(interval) || interval <= 0) return;
+  const tooLongSilent = !Number.isFinite(MONITOR_SOUND.lastBeatAt) || (ctx.currentTime - MONITOR_SOUND.lastBeatAt) > Math.max(0.25, Math.min(1.0, interval * 1.25));
+  const nextBeatStale = !Number.isFinite(MONITOR_SOUND.nextBeatTime) || MONITOR_SOUND.nextBeatTime <= 0 || MONITOR_SOUND.nextBeatTime > ctx.currentTime + Math.max(1.5, interval * 2.2);
+  if(MONITOR_SOUND.recoveryPending || MONITOR_SOUND.mode !== 'beep' || tooLongSilent || nextBeatStale){
+    armImmediateRecoveryBeat(ctx, hr, MONITOR_SOUND.recoveryPending ? 'recovery' : (tooLongSilent ? 'watchdog' : 'resync'));
+    return;
+  }
+  const lookAhead = Math.max(0.35, Math.min(0.8, interval * 0.9));
+  while(MONITOR_SOUND.nextBeatTime <= ctx.currentTime + lookAhead){
+    scheduleMonitorBeat(MONITOR_SOUND.nextBeatTime, 'steady');
+    MONITOR_SOUND.nextBeatTime += interval;
+  }
+  MONITOR_SOUND.lastHealthyAt = ctx.currentTime;
+  MONITOR_SOUND.mode = 'beep';
+}
+function monitorTick(){
+  if(!MONITOR_SOUND.enabled){ MONITOR_SOUND.rafId = 0; return; }
+  updateMonitorSound();
+  MONITOR_SOUND.rafId = requestAnimationFrame(monitorTick);
+}
+function startMonitorLoop(){
+  if(MONITOR_SOUND.rafId) return;
+  MONITOR_SOUND.rafId = requestAnimationFrame(monitorTick);
+  pushMonitorLog('loop-start');
+}
+function stopMonitorLoop(){
+  if(MONITOR_SOUND.rafId){
+    cancelAnimationFrame(MONITOR_SOUND.rafId);
+    MONITOR_SOUND.rafId = 0;
+  }
+  silenceMonitorSound();
+  pushMonitorLog('loop-stop');
+}
+async function toggleMonitorSound(){
+  MONITOR_SOUND.enabled = !MONITOR_SOUND.enabled;
+  if(MONITOR_SOUND.enabled){
+    const ctx = await resumeMonitorContext('toggle-on');
+    if(!ctx){
+      MONITOR_SOUND.enabled = false;
+      setMonitorButton();
+      alert('このブラウザではモニター音を再生できません。');
+      return;
+    }
+    resetMonitorSchedule('toggle-on-reset', true);
+    applyMonitorVolume();
+    setMonitorButton();
+    startMonitorLoop();
+    updateMonitorSound();
+  }else{
+    stopMonitorLoop();
+    setMonitorButton();
+  }
+}
+function handleMonitorVolumeInput(){
+  const el = document.getElementById('monitorVolume');
+  if(!el) return;
+  MONITOR_SOUND.volume = Math.max(0, Math.min(1, (+el.value || 0) / 100));
+  applyMonitorVolume();
+}
+
 /* ---- 正常/薬物作用中/回復中 の判定バッジ ---- */
 const NORMAL_TOL = { map:5, hr:5, rr:2 }; // 正常判定の許容偏差（MAP±5mmHg / HR±5bpm / RR±2回/分：生理的ゆらぎ範囲）
 let _statusState = 'ok';                  // 直前の状態（ヒステリシス用）
 function statusBadge(){
   const el = document.getElementById('statusBadge');
   if(!el) return;
+  const vitals = getCurrentVitalsSnapshot();
+  const hrNow = Math.max(0, Number.isFinite(vitals.hr) ? vitals.hr : 0);
+  if(hrNow <= 0.0001 || vitals.map <= 0.5 || vitals.sbp <= 0.5){
+    _statusState = 'asystole';
+    el.textContent = 'ASYSTOLE';
+    el.className = 'status-badge asystole';
+    el.style.display = 'inline-block';
+    setAsystoleAlarm(true, vitals);
+    return;
+  }
+  setAsystoleAlarm(false, vitals);
   // 現在値とベースラインの偏差
-  const dev = {};
-  [['map','MAP'],['hr','HR'],['rr','RR']].forEach(([k])=>{
-    const r2 = valueAtTime(k, simTime);
-    dev[k] = r2 && isFinite(r2.v) ? Math.abs(r2.v - baseline[k]) : 0;
-  });
+  const dev = {
+    map: Math.abs((Number.isFinite(vitals.map) ? vitals.map : baseline.map) - baseline.map),
+    hr: Math.abs((Number.isFinite(vitals.hr) ? vitals.hr : baseline.hr) - baseline.hr),
+    rr: Math.abs((Number.isFinite(vitals.rr) ? vitals.rr : baseline.rr) - baseline.rr)
+  };
   // ヒステリシス：正常→異常は1.5倍閾値、異常→正常は基準閾値（チャタリング防止）
   const th = _statusState==='ok'
             ? {map:NORMAL_TOL.map*1.5, hr:NORMAL_TOL.hr*1.5, rr:NORMAL_TOL.rr*1.5}
@@ -1444,6 +1815,7 @@ function renderTable(){
 /* ---- リセット ---- */
 function resetSim(keepDrugs){
   events=[]; markers=[]; simTime=0; nextSample=0; running=false;
+  resetMonitorEngine(MONITOR_SOUND.enabled);
   _statusState = 'ok';
   data.times.length=0;
   ['sbp','dbp','map','hr','rr'].forEach(k=>data[k].length=0);
@@ -1495,11 +1867,15 @@ function setControls(){
   ['bSBP','bDBP','bHR','bRR','bWt'].forEach(id=>{
     document.getElementById(id).disabled = running;
   });
+  const sndBtn = document.getElementById('btnMonitorSound');
+  if(sndBtn) sndBtn.disabled = false;
 }
 
 /* ---- イベント登録 ---- */
 document.getElementById('btnRun').addEventListener('click', toggle);
 document.getElementById('btnReset').addEventListener('click', fullReset);
+document.getElementById('btnMonitorSound').addEventListener('click', ()=>{ toggleMonitorSound(); });
+document.getElementById('monitorVolume').addEventListener('input', handleMonitorVolumeInput);
 document.querySelectorAll('.btn-speed').forEach(b=>{
   b.addEventListener('click', ()=>{
     speedIdx = +b.dataset.speedIdx;
@@ -1600,8 +1976,52 @@ setControls();
 renderSchedList();
 syncDoseUI();
 updateViewRange();
-updateReadoutsByTime(0); // 初期表示：大型デジタル表示にベースライン値を反映
+const demoMode = new URLSearchParams(location.search).get('demo');
+if(demoMode === 'asystole'){
+  const pairs = [['bSBP','oSBP'],['bDBP','oDBP'],['bHR','oHR'],['bRR','oRR']];
+  pairs.forEach(([sid, oid])=>{
+    const s = document.getElementById(sid), o = document.getElementById(oid);
+    if(s) s.value = 0;
+    if(o) o.textContent = '0';
+  });
+  baseline = baselineFromUI();
+}else if(demoMode === 'recovery'){
+  const box = document.querySelector('.charts-vert');
+  if(box){
+    const note = document.createElement('div');
+    note.className = 'note';
+    note.style.margin = '0 0 8px';
+    note.style.fontWeight = '700';
+    note.textContent = '回復後デモ（心停止解除後の表示）';
+    box.prepend(note);
+  }
+}else if(demoMode === 'hex'){
+  const box = document.querySelector('.charts-vert');
+  if(box){
+    const note = document.createElement('div');
+    note.className = 'note';
+    note.style.margin = '0 0 8px';
+    note.style.fontWeight = '700';
+    note.textContent = 'Hexデモ（低血圧でもHR高値にしない確認）';
+    box.prepend(note);
+  }
+  [['bSBP','oSBP',40],['bDBP','oDBP',20],['bHR','oHR',70],['bRR','oRR',16]].forEach(([sid,oid,val])=>{
+    const s = document.getElementById(sid), o = document.getElementById(oid);
+    if(s) s.value = val;
+    if(o) o.textContent = String(val);
+  });
+  baseline = baselineFromUI();
+  state.Hex.dose = 100;
+  state.Hex.mult = 10;
+  scheduleDose('Hex', 0);
+  simTime = 60;
+  nextSample = simTime + SAMPLE_DT;
+  rebuildData();
+}
+updateReadoutsByTime(simTime); // 初期表示：大型デジタル表示にベースライン値を反映
 statusBadge();            // 初期表示：正常判定バッジ
+handleMonitorVolumeInput();
+setMonitorButton();
 
 /* ================= レポート出力（Excel / PDF / PNG） ================= */
 function reportMeta(){
@@ -1707,5 +2127,6 @@ function exportPDF(){
   });
 }
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
