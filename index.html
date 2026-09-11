@@ -65,68 +65,76 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   header h1{margin:0;font-size:1.2rem}
   header p{margin:4px 0 0;font-size:.78rem;opacity:.85}
   main{max-width:1100px;margin:0 auto;padding:16px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
-  .card h2{margin:0 0 10px;font-size:1rem;border-left:4px solid var(--accent);padding-left:8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+  .card.primary{border-color:var(--accent);box-shadow:0 2px 10px rgba(47,111,191,.08)}
+  .card h2{margin:0 0 8px;font-size:.92rem;border-left:3px solid var(--accent);padding-left:8px;color:#34495e}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .grid5>div{min-width:0}
+  @media(max-width:720px){.grid5{grid-template-columns:repeat(2,1fr)}}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media(max-width:720px){.grid2{grid-template-columns:1fr}}
-  .slider-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.85rem}
-  .slider-row label{width:170px;flex:none}
-  .slider-row input[type=range]{flex:1}
-  .slider-row output{width:70px;text-align:right;font-weight:bold;flex:none}
-  .timeline-admin{display:flex;align-items:center;gap:8px;font-size:.85rem;flex-wrap:wrap}
-  .timeline-admin select{padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-size:.85rem;background:#fff}
-  .timeline-admin input[type=range]{width:160px}
-  .timeline-admin output{width:90px;text-align:right;font-weight:bold}
-  .timeline-admin .btn-mult{margin-left:2px;padding:3px 8px;font-size:.72rem;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--text);cursor:pointer}
+  .slider-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;font-size:.78rem;min-width:0}
+  .slider-row label{font-weight:600;color:#3a4652;white-space:nowrap}
+  .slider-row input[type=range]{flex:1 1 auto;min-width:0;max-width:100%}
+  .slider-row output{width:42px;text-align:right;font-weight:bold;font-variant-numeric:tabular-nums;flex:none;font-size:.8rem}
+  .timeline-admin{display:flex;align-items:center;gap:6px;font-size:.82rem;flex-wrap:wrap}
+  .timeline-admin select{padding:4px 6px;border:1px solid var(--line);border-radius:6px;font-size:.82rem;background:#fff}
+  .timeline-admin input[type=range]{width:140px}
+  .timeline-admin output{width:80px;text-align:right;font-weight:bold;font-variant-numeric:tabular-nums}
+  .timeline-admin .btn-mult{margin-left:1px;padding:3px 8px;font-size:.72rem;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--text);cursor:pointer}
   .timeline-admin .btn-mult.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .sched-list{font-size:.78rem;max-height:150px;overflow-y:auto;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:#fafbfc;margin-top:4px}
-  .sched-list .row{display:flex;align-items:center;gap:8px;padding:2px 0}
+  .sched-list{font-size:.74rem;max-height:100px;overflow-y:auto;border:1px solid var(--line);border-radius:6px;padding:4px 6px;background:#fafbfc;margin-top:4px}
+  .sched-list .row{display:flex;align-items:center;gap:8px;padding:1px 0}
   .sched-list .row b{color:var(--accent)}
   .sched-list .future{color:#8a6d3b}
   .sched-list .past{color:#7a8894}
-  .sched-list .del{cursor:pointer;color:var(--accent2);border:1px solid #e0b4b0;background:#fff;border-radius:4px;padding:0 7px;font-size:.72rem;margin-left:auto}
-  .ctrl-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
-  button{cursor:pointer;border:none;border-radius:6px;padding:9px 16px;font-size:.88rem;font-weight:bold}
+  .sched-list .del{cursor:pointer;color:var(--accent2);border:1px solid #e0b4b0;background:#fff;border-radius:4px;padding:0 6px;font-size:.7rem;margin-left:auto}
+  .ctrl-top{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+  button{cursor:pointer;border:none;border-radius:6px;padding:7px 14px;font-size:.85rem;font-weight:bold}
   .btn-run{background:var(--accent);color:#fff}
   .btn-run.running{background:var(--accent2)}
   .btn-reset{background:#eef0f3;color:var(--text)}
-  .btn-speed{background:#fff;border:1px solid var(--line);color:var(--text);padding:6px 12px;font-size:.8rem}
+  .btn-speed{background:#fff;border:1px solid var(--line);color:var(--text);padding:4px 10px;font-size:.74rem}
   .btn-speed.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .speed-group{display:flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid #d7e2ee;border-radius:999px;background:#f7fbff}
-  .speed-label{font-size:.78rem;color:#5a6a78;font-weight:700;letter-spacing:.02em}
-  .speed-buttons{display:flex;gap:6px;flex-wrap:wrap}
-  .timebox{font-size:1.1rem;font-weight:bold;margin-left:auto;white-space:nowrap}
-  .progress{height:6px;background:#eef0f3;border-radius:3px;overflow:hidden;margin:6px 0 0}
+  .speed-group{display:flex;align-items:center;gap:5px;padding:3px 8px;border:1px solid #d7e2ee;border-radius:999px;background:#f7fbff}
+  .speed-label{font-size:.7rem;color:#5a6a78;font-weight:700;letter-spacing:.02em}
+  .speed-buttons{display:flex;gap:3px;flex-wrap:wrap}
+  .timebox{font-size:.92rem;font-weight:bold;margin-left:auto;white-space:nowrap;background:#fff;padding:3px 9px;border-radius:6px;border:1px solid var(--line);font-variant-numeric:tabular-nums;font-family:monospace}
+  .progress{height:4px;background:#eef0f3;border-radius:2px;overflow:hidden;margin:4px 0 0}
   .progress>div{height:100%;background:var(--accent);width:0%}
   .charts-vert{position:relative;display:flex;flex-direction:column;gap:12px;padding-top:30px}
   .graph-status{position:absolute;top:0;left:0;z-index:6;pointer-events:none}
-  .zoom-ctrl{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:.85rem;flex-wrap:wrap}
-  .zoom-ctrl .btn-zoom{background:#fff;border:1px solid var(--line);color:var(--accent);padding:5px 12px;font-size:.8rem;font-weight:bold;border-radius:5px;cursor:pointer}
+  .zoom-ctrl{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:.74rem;flex-wrap:wrap}
+  .zoom-ctrl .btn-zoom{background:#fff;border:1px solid var(--line);color:var(--accent);padding:3px 9px;font-size:.72rem;font-weight:bold;border-radius:4px;cursor:pointer}
   .zoom-ctrl .btn-zoom:hover{background:#eef4fc}
   .zoom-ctrl .btn-zoom.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .view-range{margin-left:auto;font-size:.78rem;color:#5a6a78;font-family:monospace;white-space:nowrap}
-  .chart-box{position:relative;height:200px;border:1px solid var(--line);border-radius:6px;padding:4px 6px;background:#fff}
-  .chart-box .live-readout{position:absolute;top:6px;right:8px;font-size:1.1rem;font-weight:bold;font-family:monospace;color:var(--text);background:rgba(255,255,255,0.85);padding:2px 8px;border-radius:4px;border:1px solid var(--line);z-index:5;pointer-events:none;min-width:110px;text-align:right}
+  .view-range{margin-left:auto;font-size:.7rem;color:#94a3b0;font-family:monospace;white-space:nowrap}
+  .chart-box{position:relative;height:170px;border:1px solid var(--line);border-radius:6px;padding:3px 5px;background:#fff}
+  .chart-box .live-readout{position:absolute;top:4px;right:6px;font-size:.85rem;font-weight:bold;font-family:monospace;color:var(--text);background:rgba(255,255,255,0.85);padding:1px 5px;border-radius:3px;border:1px solid var(--line);z-index:5;pointer-events:none;min-width:90px;text-align:right}
   .chart-box .live-readout .live-unit{font-size:.65rem;color:#7a8894;font-weight:normal;margin-left:3px}
   .chart-box .live-readout .live-cursor{font-size:.6rem;color:#7a8894;font-weight:normal;display:block;line-height:1}
   .chart-box .crosshair{position:absolute;border-left:1px dashed rgba(47,111,191,0.45);pointer-events:none;z-index:4;top:0;bottom:0;width:0}
   .chart-box .live-marker{position:absolute;width:8px;height:8px;border-radius:50%;background:#2f6fbf;border:2px solid #fff;pointer-events:none;z-index:5;transform:translate(-50%,-50%);display:none;box-shadow:0 0 4px rgba(0,0,0,0.3)}
   /* グラフ直上の大型デジタル表示 */
-  .live-big{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
-  .live-big-item{flex:1;min-width:150px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 8px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg,#fff,#f2f5f8);border-top:3px solid var(--c,#8e44ad);box-shadow:0 1px 3px rgba(0,0,0,0.06)}
-  .live-big-item .lb-label{font-size:.72rem;color:#5a6a78;letter-spacing:.03em}
-  .live-big-item .lb-val{font-size:2.4rem;font-weight:800;font-family:monospace;font-variant-numeric:tabular-nums;line-height:1.05;color:var(--c,#8e44ad)}
-  .live-big-item .lb-unit{font-size:.7rem;color:#7a8894}
-  .legend{font-size:.8rem;margin-bottom:6px}
-  .legend span{display:inline-block;margin-right:14px}
-  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
-  table{width:100%;border-collapse:collapse;font-size:.85rem}
-  th,td{border:1px solid var(--line);padding:6px 8px;text-align:right}
-  th{background:#f0f3f7}
+  .live-big{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+  .live-big-item{flex:1;min-width:110px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 6px;border:1px solid var(--line);border-radius:6px;background:#fafbfc;border-top:2px solid var(--c,#8e44ad)}
+  .live-big-item .lb-label{font-size:.66rem;color:#5a6a78;letter-spacing:.02em;font-weight:600}
+  .live-big-item .lb-val{font-size:1.6rem;font-weight:800;font-family:monospace;font-variant-numeric:tabular-nums;line-height:1.05;color:var(--c,#8e44ad)}
+  .live-big-item .lb-unit{font-size:.62rem;color:#94a3b0}
+  .legend{font-size:.74rem;margin-bottom:4px;color:#5a6a78}
+  .legend span{display:inline-block;margin-right:10px}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:3px;vertical-align:-1px}
+  table{width:100%;border-collapse:collapse;font-size:.78rem}
+  #labTable th{background:#eef4fb;color:#34495e;text-align:left;padding:4px 6px;border:1px solid #dfe6ee;font-weight:700}
+  #labTable td{border:1px solid #e8edf3;padding:4px 6px;vertical-align:top}
+  #labTable tr.lab-measuring td{background:#fdf6ec}
+  #labTable tr.lab-done td{background:#fff}
+  th,td{border:1px solid var(--line);padding:3px 6px;text-align:right}
+  th{background:#f0f3f7;font-size:.72rem}
   td:first-child,th:first-child{text-align:left}
-  .note{font-size:.72rem;color:#7a8894;margin-top:8px}
-  .badge{font-size:.7rem;color:#5a6a78;background:#eef0f3;border-radius:4px;padding:1px 6px}
-  .log{font-size:.78rem;max-height:120px;overflow-y:auto;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:#fafbfc}
+  .note{font-size:.66rem;color:#94a3b0;margin-top:4px;line-height:1.35}
+  .badge{font-size:.66rem;color:#5a6a78;background:#eef0f3;border-radius:3px;padding:0 5px;font-weight:600}
+  .log{font-size:.72rem;max-height:90px;overflow-y:auto;border:1px solid var(--line);border-radius:6px;padding:4px 6px;background:#fafbfc}
   .log .row{color:#3a4652}
   .log .row b{color:var(--accent)}
 
@@ -155,10 +163,11 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
   .status-badge.active{background:#e67e22}
   .status-badge.rec{background:#3498db}
   .status-badge.asystole{background:#c0392b}
-  .monitor-audio{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .monitor-audio label{font-size:.78rem;color:#5a6a78;font-weight:700}
-  .monitor-audio input[type=range]{width:140px}
-  .monitor-audio output{min-width:42px;text-align:right;font-variant-numeric:tabular-nums;color:#c0392b;font-weight:700}
+  .monitor-audio{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:#fafbfc}
+  .monitor-audio label{font-size:.7rem;color:#5a6a78;font-weight:700}
+  .monitor-audio input[type=range]{width:90px}
+  .monitor-audio output{min-width:36px;text-align:right;font-variant-numeric:tabular-nums;color:#c0392b;font-weight:700;font-size:.74rem}
+  .monitor-audio .btn-zoom{padding:3px 9px;font-size:.72rem}
   .alarm-banner{display:none;align-items:center;justify-content:center;gap:10px;margin:0 0 10px;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#5a0a0a,#a51212);color:#fff;font-weight:800;letter-spacing:.08em;box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 8px 24px rgba(165,18,18,.35)}
   .alarm-banner small{font-size:.78rem;font-weight:700;letter-spacing:.04em;opacity:.9}
   body.alarm-asystole{background:#fff2f2}
@@ -175,24 +184,16 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
 <main>
   <!-- ベースライン設定 -->
   <div class="card">
-    <h2>生理学的ベースライン（安定時値）</h2>
-    <div class="grid2">
-      <div>
-        <div class="slider-row"><label>収縮期血圧 SBP</label><input type="range" id="bSBP" min="0" max="200" value="120"><output id="oSBP">120</output><span class="badge">mmHg</span></div>
-        <div class="slider-row"><label>拡張期血圧 DBP</label><input type="range" id="bDBP" min="0" max="140" value="80"><output id="oDBP">80</output><span class="badge">mmHg</span></div>
-      </div>
-      <div>
-        <div class="slider-row"><label>心拍数 HR</label><input type="range" id="bHR" min="0" max="160" value="70"><output id="oHR">70</output><span class="badge">回/分</span></div>
-        <div class="slider-row"><label>呼吸数 RR</label><input type="range" id="bRR" min="0" max="40" value="16"><output id="oRR">16</output><span class="badge">回/分</span></div>
-      </div>
+    <h2>ベースライン（安定時値）</h2>
+    <div class="grid5">
+      <div><div class="slider-row"><label>MAP 平均血圧</label><input type="range" id="bMAP" min="40" max="140" value="93"><output id="oMAP">93</output><span class="badge">mmHg</span></div></div>
+      <!-- ★V11: SBP/DBP スライダーは内部計算用に保持（非表示） -->
+      <input type="hidden" id="bSBP" value="120"><input type="hidden" id="bDBP" value="80">
+      <div><div class="slider-row"><label>HR</label><input type="range" id="bHR" min="0" max="160" value="70"><output id="oHR">70</output><span class="badge">回/分</span></div></div>
+      <div><div class="slider-row"><label>RR</label><input type="range" id="bRR" min="0" max="40" value="16"><output id="oRR">16</output><span class="badge">回/分</span></div></div>
+      <div><div class="slider-row"><label>体重</label><input type="range" id="bWt" min="30" max="150" value="70"><output id="oWt">70</output><span class="badge">kg</span></div></div>
     </div>
-    <div class="slider-row" style="margin-top:8px">
-      <label>体重（成人）</label>
-      <input type="range" id="bWt" min="30" max="150" value="70">
-      <output id="oWt">70</output><span class="badge">kg</span>
-    </div>
-    <div class="note" id="wtNote">全薬物が体重連動（mg/kg・µg/kg）です。体重を変えると用量表示と効果量が再計算されます。</div>
-    <div class="note">MAP（平均血圧）＝ DBP ＋ (SBP − DBP) ÷ 3 として自動算出します。ベースラインは実行中ロックされます。シミュレーションは時間制限なしで、停止・リセットするまで継続します。</div>
+    <div class="note">MAPは内部でSBP/DBPから自動算出・体重連動（mg/kg・µg/kg）・実行中はベースラインロック</div>
   </div>
 
   <!-- コントロール -->
@@ -220,15 +221,13 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       <label style="font-size:.78rem;color:#5a6a78;display:flex;align-items:center;gap:4px"><input type="checkbox" id="teachingMode"> 教育モード</label>
       <span class="timebox" id="timeBox">0.0 秒</span>
     </div>
-    <div class="note" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+    <div class="note" style="margin-top:4px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
       <span>表示時刻</span>
-      <input type="range" id="simScrub" min="0" max="300" step="0.5" value="0" style="flex:1;min-width:220px">
+      <input type="range" id="simScrub" min="0" max="300" step="0.5" value="0" style="flex:1;min-width:180px">
       <output id="simScrubOut">0.0 秒</output>
-      <span id="phaseLabel" style="font-weight:700;color:#2f6fbf">相: ベースライン</span>
+      <span id="phaseLabel" style="font-weight:700;color:#2f6fbf;font-size:.74rem">相: ベースライン</span>
     </div>
     <div class="progress" style="display:none"><div id="progBar"></div></div>
-    <div class="note" style="margin-top:8px">グラフは直近120秒を自動スクロール表示。4x/10x/30x・次相へ・スクラブで壁時計時間だけを短縮できます。</div>
-    <div class="note">モニター音は初期OFFです。クリックで有効化すると、HRに同期したビープ音が鳴り、HR=0では持続音へ自動切替します。</div>
   </div>
 
   <!-- タイムライン投与 -->
@@ -248,19 +247,19 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
       <button class="btn-mult" data-mult="10">×10</button>
       <span class="note" style="margin:0;flex-basis:100%">血圧・心拍数・呼吸数の各グラフ上をクリックすると、現在時刻（グラフ最右端）に選択した薬物を投与します。用量は体重連動（mg/kg・µg/kg）の代表値（概算）です。体重を変えると全薬物の用量が再計算されます。</span>
     </div>
-    <div class="note" style="margin-top:8px">クリックは常に現在時刻への投与です（過去・未来の時刻指定はできません）。</div>
-    <div class="note" style="margin-top:4px">投与予定・実行済みリスト（削除可）</div>
+    <div class="note" style="margin-top:4px">グラフ上クリック＝現在時刻に投与（体重連動 mg/kg・µg/kg）／予定・実行済みリスト（削除可）</div>
     <div class="sched-list" id="schedList"><div class="row" style="color:#aab4bf">（なし）</div></div>
+    <div id="logBox" style="display:none"></div>
   </div>
 
   <!-- グラフ（縦3枚：BP / HR / RR） -->
-  <div class="card print-keep">
+  <div class="card print-keep primary">
     <h2>時間変化グラフ（平均値トレンド）</h2>
     <div class="legend">
-      <span><span class="dot" style="background:#8e44ad"></span>MAP 平均血圧</span>
-      <span><span class="dot" style="background:#2e86c1"></span>HR 心拍数</span>
-      <span><span class="dot" style="background:#27ae60"></span>RR 呼吸数</span>
-      <span style="color:#7a8894">点線+ラベル＝投与</span>
+      <span><span class="dot" style="background:#8e44ad"></span>MAP</span>
+      <span><span class="dot" style="background:#2e86c1"></span>HR</span>
+      <span><span class="dot" style="background:#27ae60"></span>RR</span>
+      <span style="color:#94a3b0">／ 点線=投与</span>
     </div>
     <div class="zoom-ctrl">
       <span style="font-size:.8rem;color:#5a6a78">X軸（全グラフ連動）:</span>
@@ -307,34 +306,45 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
     </div>
   </div>
 
-  <!-- 変動率テーブル -->
-  <div class="card print-keep">
-    <h2>変動率（安定時値からの最大変動）</h2>
-    <table id="rateTable">
-      <thead><tr><th>パラメータ</th><th>安定時値(投与前)</th><th>ピーク値</th><th>ピーク時刻(秒)</th><th>変動率(/分)</th></tr></thead>
+  <div class="card print-keep" style="margin-top:0">
+    <details><summary style="cursor:pointer;font-weight:700;color:#34495e;font-size:.85rem;padding:4px 0">変動率サマリー（クリックで展開）</summary>
+    <table id="rateTable" style="margin-top:6px">
+      <thead><tr><th>パラメータ</th><th>基準値</th><th>ピーク値</th><th>ピーク時刻(秒)</th><th>変動率(/分)</th></tr></thead>
       <tbody></tbody>
     </table>
-    <div class="note">変動率＝(ピーク値−安定時値)÷ピーク時刻(分)。全ての薬効は時間とともに0へ減衰し、安定時値へ復帰します。</div>
+    <div class="note">変動率=(ピーク値−安定時値)/ピーク時刻(分)。薬効は時間とともに0へ減衰し安定時値へ復帰。</div>
+    </details>
   </div>
 
-  <!-- 投与ログ -->
-  <div class="card">
-    <h2>投与ログ</h2>
-    <div class="log" id="logBox"><div class="row" style="color:#aab4bf">（未投与）</div></div>
-  </div>
-
-
-  <!-- レポート出力（実習用） -->
-  <div class="card print-keep">
-    <h2>レポート出力（実習用）</h2>
-    <div class="report-btns">
-      <button class="btn-report" onclick="exportExcel()">📊 Excel出力（レポート用）</button>
-      <button class="btn-report" onclick="exportPDF()">📄 結果PDF</button>
-      <button class="btn-report" onclick="exportPNG()">🖼 グラフPNG保存</button>
+  <div class="card print-keep" style="padding:10px 14px">
+    <details><summary style="cursor:pointer;font-weight:700;color:#34495e;font-size:.85rem;padding:4px 0">📤 エクスポート / レポート（クリックで展開）</summary>
+    <div class="report-btns" style="margin-top:8px">
+      <button class="btn-report" onclick="exportExcel()">📊 Excel</button>
+      <button class="btn-report" onclick="exportPDF()">📄 PDF</button>
+      <button class="btn-report" onclick="exportPNG()">🖼 PNG</button>
     </div>
-    <div class="note">Excel出力：実験条件・生データ・変動サマリー・考察テンプレートの4シートを1つのxlsxにまとめます。結果PDF：グラフと表を印刷用に整形し、ブラウザの「PDFに保存」で提出用PDFを作れます。グラフPNG：3つのグラフを画像として保存します。</div>
+    <div class="note">Excel: 4シート（条件/生データ/サマリー/考察テンプレ）／PDF: 印刷整形／PNG: グラフ画像</div>
+    </details>
+  </div>
+
+  <!-- 実験ノート（投与前後ログ） -->
+  <div class="card print-keep" id="labCard">
+    <h2>📓 実験ノート（投与前後ログ）</h2>
+    <div class="note">前値＝各投与セット直前60秒の平均値（データ不足時はベースライン安定時値）。後値＝セット最終投与から3分後（180秒）の値。変化率＝(後値−前値)÷前値×100。直前の投与から30秒以内の連続投与（例：アトロピン→アセチルコリン）は1セットとしてまとめ、1剤目投与前を前値・最終投与3分後を後値として記録します。3分経過前は「測定中」と表示されます。</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0">
+      <button class="btn-report" id="btnLabCopy" style="padding:6px 12px;font-size:.78rem">📋 CSVコピー</button>
+      <button class="btn-report" id="btnLabDl" style="padding:6px 12px;font-size:.78rem">⬇ CSVダウンロード</button>
+      <button class="btn-report" id="btnLabClear" style="padding:6px 12px;font-size:.78rem;background:#7f8c8d">🗑 ログをクリア</button>
+      <span id="labMsg" style="color:#27ae60;font-size:.75rem"></span>
+    </div>
+    <table id="labTable" style="margin-top:4px">
+      <thead><tr><th>No</th><th>投与薬物（セット）</th><th>パラメータ</th><th>投与前値</th><th>投与後値（3分後）</th><th>変化率%</th><th>状態</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="note" id="labSummary" style="color:#2f6fbf;margin-top:4px"></div>
+  </div>
     <div class="print-only">
-      <h3>考察（印刷用）</h3>
+      <h3 style="font-size:.92rem;margin:6px 0">考察（印刷用）</h3>
       <p>1. この薬の作用機序は何か？</p><div class="kousatsu"></div>
       <p>2. 予想された変化と実際の変化の差は？</p><div class="kousatsu"></div>
       <p>3. 拮抗薬を併用するとどう変わったか？</p><div class="kousatsu"></div>
@@ -354,23 +364,82 @@ t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=xk(e,t);t.type="arra
    ===================================================================== */
 
 /* ---- 薬物データモデル（onset/peak/dur は秒） ---- */
+/* ★V13 Emaxモデル: effect = Emax·doseⁿ/(ED50ⁿ+doseⁿ) — 臨床用量反応を再現 */
 const DRUGS = {
-  Adr: { name:'アドレナリン', mech:'α1主体の速い昇圧＋圧反射性徐脈 → 2–4分以内にβ2血管拡張とβ1頻脈が前景化する短時間型', onset:5, peak:30, dur:120, sbp:[40,60], dbp:[10,20], hr:[6,14], rr:[-5,0],
-         late:{ onset:120, peak:180, dur:300, sbp:[-12,-18], dbp:[-6,-10], hr:[12,20], rr:[0,0] } },
-  NA:  { name:'ノルアドレナリン', mech:'α1主体・β1弱', onset:5, peak:30, dur:300, sbp:[40,60], dbp:[30,50], hr:[-40,-20], rr:[0,0] },
-  Coc: { name:'コカイン', mech:'NE・DA再取込み阻害＋Na+チャネル遮断', onset:30, peak:120, dur:600, sbp:[12,20], dbp:[6,12], hr:[8,16], rr:[0,0], tone:{vagal:0, symp:0.25} },
-  Ach: { name:'アセチルコリン', mech:'ムスカリン＋節N刺激（二相性）', onset:2, peak:10, dur:30, sbp:[-50,-30], dbp:[-40,-20], hr:[-50,-30], rr:[5,15], nic:{sbp:[12,20], dbp:[4,8], hr:[8,15], rr:[0,0]} },
-  Phy: { name:'フィゾスチグミン', mech:'コリンエステラーゼ阻害（間接型副交感神経刺激）', onset:180, peak:600, dur:1800, sbp:[-6,-2], dbp:[-5,-2], hr:[-10,-4], rr:[0,0], tone:{vagal:0.8, symp:0} },
-  Atr: { name:'アトロピン', mech:'ムスカリン遮断', onset:10, peak:60, dur:300, sbp:[0,3], dbp:[0,0], hr:[10,20], rr:[0,0] },
-  Nic: { name:'ニコチン', mech:'節N刺激→遮断(二相性)：第1相=神経性(節後交感/速い/鋭い)・第2相=副腎性(髄質カテコラミン/遅い/持続)', onset:5, peak:15, dur:40, sbp:[30,45], dbp:[18,28], hr:[20,35], rr:[5,15],
-         late:{ onset:25, peak:90, dur:360, sbp:[22,34], dbp:[12,18], hr:[12,20], rr:[0,0] } },
-  Hex: { name:'ヘキサメトニウム', mech:'神経節遮断（交感・副交感トーン除去。反射性頻脈は起こさない前提で、HRの直接上昇成分は持たせない）', onset:10, peak:60, dur:180, sbp:[-10,-5], dbp:[-8,-4], hr:[0,0], rr:[0,0], tone:{vagal:-1, symp:-1} },
-  Phe: { name:'フェントラミン', mech:'α受容体遮断', onset:10, peak:120, dur:900, sbp:[-20,-10], dbp:[-10,0], hr:[5,10], rr:[0,0] },
-  Iso: { name:'イソプロテレノール', mech:'β1,β2刺激（β2拡張でSBPほぼ不変・脈圧拡大）', onset:5, peak:30, dur:90, sbp:[-4,4], dbp:[-30,-20], hr:[40,60], rr:[0,0] },
-  Pro: { name:'プロプラノロール', mech:'β受容体遮断（心臓交感トーン除去）', onset:10, peak:60, dur:180, sbp:[0,0], dbp:[0,0], hr:[-10,-5], rr:[0,0], tone:{vagal:0, symp:-0.6} },
-  Eph: { name:'エフェドリン塩酸塩', mech:'間接型交感神経刺激（NA遊離＋弱い直接刺激）・反復投与でタキフィラキシー（減衰率はモデル仮定）', onset:5, peak:180, dur:3600, sbp:[18,28], dbp:[10,16], hr:[8,18], rr:[0,0], tone:{vagal:0, symp:0.5} },
-  His: { name:'ヒスタミン', mech:'H1受容体刺激', onset:5, peak:20, dur:60, sbp:[-12,-4], dbp:[-30,-20], hr:[15,25], rr:[10,20] }
+  Adr: { name:'アドレナリン', mech:'α1主体の速い昇圧＋圧反射性徐脈 → 2–4分以内にβ2血管拡張とβ1頻脈が前景化する短時間型',
+         onset:5, peak:30, dur:120,
+         sbp:{Emax:50, ED50:3, n:1.4}, dbp:{Emax:25, ED50:3, n:1.4},
+         hr:{Emax:25,  ED50:3, n:1.4},  rr:{Emax:-3,  ED50:3, n:1.4},
+         late:{ onset:120, peak:180, dur:300,
+                sbp:{Emax:-15, ED50:3, n:1.4}, dbp:{Emax:-8,  ED50:3, n:1.4},
+                hr:{Emax:16,   ED50:3, n:1.4},  rr:{Emax:0,   ED50:3, n:1.4} } },
+  NA:  { name:'ノルアドレナリン', mech:'α1主体で強く昇圧・β1弱陽性（臨床用量域でMAP+5-10%；1 µg/kg IV → MAP+4-5 mmHg, HR軽度低下）',
+         onset:5, peak:30, dur:300,
+         sbp:{Emax:12, ED50:1,   n:1.4}, dbp:{Emax:9,  ED50:1,   n:1.4},
+         hr:{Emax:-2, ED50:1,   n:1.4}, rr:{Emax:0,  ED50:1,   n:1} },
+  Coc: { name:'コカイン', mech:'NE・DA再取込み阻害＋Na+チャネル遮断',
+         onset:30, peak:120, dur:600,
+         sbp:{Emax:25, ED50:3, n:1.4}, dbp:{Emax:15, ED50:3, n:1.4},
+         hr:{Emax:30, ED50:3, n:1.4},  rr:{Emax:0,  ED50:1, n:1},
+         tone:{vagal:0, symp:0.25} },
+  Ach: { name:'アセチルコリン', mech:'ムスカリン(M2心筋抑制＋M3/NO末梢血管拡張)＋節N刺激',
+         onset:2, peak:10, dur:30,
+         sbp:{Emax:-35, ED50:1, n:1.4}, dbp:{Emax:-20, ED50:1, n:1.4},
+         hr:{Emax:-25,  ED50:1, n:1.4}, rr:{Emax:8,   ED50:1, n:1.4},
+         nic:{sbp:{Emax:18, ED50:1, n:1.4}, dbp:{Emax:6,  ED50:1, n:1.4},
+              hr:{Emax:12,  ED50:1, n:1.4}, rr:{Emax:0,  ED50:1, n:1}} },
+  Phy: { name:'フィゾスチグミン', mech:'コリンエステラーゼ阻害（間接型副交感神経刺激）',
+         onset:180, peak:600, dur:1800,
+         sbp:{Emax:-10, ED50:0.05, n:1.4}, dbp:{Emax:-8,  ED50:0.05, n:1.4},
+         hr:{Emax:-20,  ED50:0.05, n:1.4}, rr:{Emax:0,   ED50:1,    n:1},
+         tone:{vagal:0.8, symp:0} },
+  Atr: { name:'アトロピン', mech:'ムスカリン遮断（AHA ACLS: 0.5 mg IV → HR+30-40 bpm）',
+         onset:10, peak:60, dur:300,
+         sbp:{Emax:5,  ED50:0.5, n:1.4}, dbp:{Emax:0, ED50:0.5, n:1.4},
+         hr:{Emax:40, ED50:0.5, n:1.4},  rr:{Emax:0, ED50:1,   n:1} },
+  Nic: { name:'ニコチン', mech:'節N刺激→遮断(二相性)：第1相=神経性(節後交感)・第2相=副腎性(髄質カテコラミン)',
+         onset:5, peak:15, dur:40,
+         sbp:{Emax:30, ED50:0.3, n:1.4}, dbp:{Emax:20, ED50:0.3, n:1.4},
+         hr:{Emax:20,  ED50:0.3, n:1.4}, rr:{Emax:8,  ED50:0.3, n:1.4},
+         late:{ onset:25, peak:90, dur:360,
+                sbp:{Emax:28, ED50:0.3, n:1.4}, dbp:{Emax:15, ED50:0.3, n:1.4},
+                hr:{Emax:16,  ED50:0.3, n:1.4}, rr:{Emax:0,  ED50:0.3, n:1.4} } },
+  Hex: { name:'ヘキサメトニウム', mech:'神経節遮断（交感・副交感トーン除去）',
+         onset:10, peak:60, dur:180,
+         sbp:{Emax:-20, ED50:5, n:1.4}, dbp:{Emax:-15, ED50:5, n:1.4},
+         hr:{Emax:5,   ED50:5, n:1.4}, rr:{Emax:0,    ED50:1, n:1},
+         tone:{vagal:-1, symp:-1} },
+  Phe: { name:'フェントラミン', mech:'α受容体遮断（α遮断で血管拡張→降圧＋反射性頻脈；0.5 mg/kg IV → MAP-22%, HR+48%）',
+         onset:10, peak:120, dur:900,
+         sbp:{Emax:-60, ED50:0.5, n:1.4}, dbp:{Emax:-40, ED50:0.5, n:1.4},
+         hr:{Emax:50,  ED50:0.5, n:1.4}, rr:{Emax:0,   ED50:1,   n:1} },
+  Iso: { name:'イソプロテレノール', mech:'β1,β2刺激（HR>+40、DBP↓、MAP軽度↓）',
+         onset:5, peak:30, dur:90,
+         sbp:{Emax:-5,  ED50:0.3, n:1.4}, dbp:{Emax:-25, ED50:0.3, n:1.4},
+         hr:{Emax:50,  ED50:0.3, n:1.4},  rr:{Emax:0,   ED50:1,   n:1} },
+  Pro: { name:'プロプラノロール', mech:'β受容体遮断（心臓交感トーン除去）',
+         onset:10, peak:60, dur:180,
+         sbp:{Emax:-12, ED50:0.5, n:1.4}, dbp:{Emax:-8, ED50:0.5, n:1.4},
+         hr:{Emax:-20, ED50:0.5, n:1.4}, rr:{Emax:0,   ED50:1,   n:1},
+         tone:{vagal:0, symp:-0.6} },
+  Eph: { name:'エフェドリン塩酸塩', mech:'間接型交感神経刺激（NA遊離＋弱い直接刺激；昇圧効果は10-15分で消退）',
+         onset:5, peak:60,  dur:900,
+         sbp:{Emax:30, ED50:0.1, n:1.4}, dbp:{Emax:20, ED50:0.1, n:1.4},
+         hr:{Emax:25,  ED50:0.1, n:1.4}, rr:{Emax:0,  ED50:1,   n:1},
+         tone:{vagal:0, symp:0.5} },
+  His: { name:'ヒスタミン', mech:'H1受容体刺激（血管拡張＋陽性変時）',
+         onset:5, peak:20, dur:60,
+         sbp:{Emax:-15, ED50:5, n:1.4}, dbp:{Emax:-30, ED50:5, n:1.4},
+         hr:{Emax:30,  ED50:5, n:1.4}, rr:{Emax:15,  ED50:5, n:1.4} }
 };
+
+/* Emax カーブ: dose^n / (ED50^n + dose^n) → Emax × ratio */
+function _emax(dose, p){
+  if(!p || !p.ED50 || p.ED50<=0 || dose<=0) return 0;
+  const dn = Math.pow(dose, p.n || 1.4);
+  const en = Math.pow(p.ED50, p.n || 1.4);
+  return p.Emax * dn / (en + dn);
+}
 /* ---- 薬物ごとのグラフ識別色（投与マーカー・ログ・効果線に使用） ---- */
 const DRUG_COLORS = {
   Adr:'#e74c3c', NA:'#e67e22', Coc:'#f1c40f', Ach:'#9b59b6', Phy:'#8e44ad',
@@ -426,8 +495,6 @@ const TONE = {
 };
 
 const PARAMS = [
-  {key:'sbp', label:'SBP 収縮期血圧', unit:'mmHg', color:'#e74c3c'},
-  {key:'dbp', label:'DBP 拡張期血圧', unit:'mmHg', color:'#e67e22'},
   {key:'map', label:'MAP 平均血圧',   unit:'mmHg', color:'#8e44ad'},
   {key:'hr',  label:'HR 心拍数',      unit:'回/分', color:'#2e86c1'},
   {key:'rr',  label:'RR 呼吸数',      unit:'回/分', color:'#27ae60'}
@@ -452,23 +519,23 @@ let _baselineNoise = makeRNG(0xC0FFEE);  // ベースライン生理ゆらぎ用
 /* ---- 生理的ゆらぎパラメータ（文献値） ----
    - RSA（呼吸性洞性不整脈, 0.25 Hz）: 安静時 HR を吸気で↑・呼気で↓させる
      SDNN 30–60 ms ≒ HR 約 ±5 bpm 揺動 [Shaffer 2017, Front Public Health]
-   - Mayer波（0.1 Hz, 周期10秒）: 動脈圧の低周波振動、SBPに振幅±4 mmHg
+   - Mayer波（0.1 Hz, 周期10秒）: 動脈圧の低周波振動、MAPに振幅±3 mmHg
      [Yasuda 1994, Jpn J Physiol; Furlan 2000, Circulation]
    - 1/f ゆらぎ: 長期相関を 3 個の低周波サイン合成で近似（白色ノイズは不使用）
-   - 圧受容器反射: HR +5 bpm → SBP −3 mmHg の負帰還
+   - 圧受容器反射: HR +5 bpm → MAP −2 mmHg の負帰還
      [Russo 2017, Breathe; slow breathing 0.1 Hz]
    - RR ゆらぎ ±1 回/分のゆるやかなサイン波のみ（sigh スパイクは除外：学生の理解を妨げるため） */
 const NOISE = {
   rsaAmp: 2,        // bpm, HR への吸気ピーク寄与（安静時 ±2–3 bpm）
   rsaFreq: 0.25,    // Hz (15 回/分 呼吸を仮定)
-  mayerAmp: 1.5,    // mmHg, SBP への Mayer 波寄与（安静時 ±2–3 mmHg）
+  mayerAmp: 1.5,    // mmHg, MAP への Mayer 波寄与（安静時 ±2–3 mmHg）
   mayerFreq: 0.1,   // Hz (周期10秒)
   baroGain: -0.1,   // mmHg / (bpm - baseline.hr)  圧受容器反射ゲイン（前回修正値・維持）
   rrAmp: 0.8,       // 回/分, RR ゆらぎ
   lfAmp: 0.6        // bpm, 1/f ゆらぎ HR 寄与（3 周波合成ピーク合計）
 };
 
-/* 時刻 t での RSA + Mayer + 1/f ゆらぎによる SBP/HR/RR の生理的オフセット
+/* 時刻 t での RSA + Mayer + 1/f ゆらぎによる MAP/HR/RR の生理的オフセット
    投与イベントが無くても、人体は安静時でもわずかに揺動する */
 function physiologicalNoise(t){
   // 呼吸位相（RSA）— 吸気 0→π で HR↑、呼気 π→2π で HR↓
@@ -502,48 +569,63 @@ function baroreflexSBP(dHR){
 /* ---- 効果振幅（用量と修飾係数を反映） ---- */
 function getAmplitude(drug, dose, mod){
   const d = DRUGS[drug];
-  const m = (mod && mod.mult) ? mod.mult : {sbp:1,dbp:1,hr:1,rr:1};
-  // ACh はムスカリン(M)＋節N(N)の二成分：
-  //   通常 = M+N（M優位で降圧）／Atr併用 = M遮断→Nのみ（節N刺激で昇圧）／Hex併用 = N遮断→Mのみ（純ムスカリンで深い降圧）
+  // MODIFIERS.mult は Emax 倍率として扱う（0.5=半減、1.5=50%増強）
+  const mx = (mod && mod.mult) ? mod.mult : {sbp:1,dbp:1,hr:1,rr:1};
+  function mulP(p, m){ return {Emax: p.Emax*m, ED50: p.ED50, n: p.n}; }
+
+  // ACh はムスカリン(M)＋節N(N)二成分
   if(drug==='Ach' && d.nic){
     let sbp=0, dbp=0, hr=0, rr=0;
-    if(!(mod && mod.nicotonic)){           // M成分（Atrで遮断）
-      sbp += randIn(d.sbp)*m.sbp*(dose/100);
-      dbp += randIn(d.dbp)*m.dbp*(dose/100);
-      hr  += randIn(d.hr)*m.hr*(dose/100);
-      rr  += randIn(d.rr)*m.rr*(dose/100);
+    if(!(mod && mod.nicotonic)){           // M成分（Atr併用で遮断 → Nのみ顕在化）
+      sbp += _emax(dose, mulP(d.sbp, mx.sbp));
+      dbp += _emax(dose, mulP(d.dbp, mx.dbp));
+      hr  += _emax(dose, mulP(d.hr,  mx.hr));
+      rr  += _emax(dose, mulP(d.rr,  mx.rr));
     }
-    if(!(mod && mod.blockNic)){            // N成分（Hexで遮断）
+    if(!(mod && mod.blockNic)){            // N成分（Hex併用で遮断 → 純M作用で深い降圧）
       const nic = (mod && mod.nicAmp) ? mod.nicAmp : d.nic;
-      sbp += randIn(nic.sbp)*(dose/100);
-      dbp += randIn(nic.dbp)*(dose/100);
-      hr  += randIn(nic.hr)*(dose/100);
-      if(nic.rr && (nic.rr[0]||nic.rr[1])) rr += randIn(nic.rr)*(dose/100);
+      sbp += _emax(dose, mulP(nic.sbp, mx.sbp));
+      dbp += _emax(dose, mulP(nic.dbp, mx.dbp));
+      hr  += _emax(dose, mulP(nic.hr,  mx.hr));
+      if(nic.rr) rr += _emax(dose, mulP(nic.rr, mx.rr));
     }
+    // baroreflex 反射を M成分側に適用（降圧による HR 補正）
+    const dmap = (sbp + 2*dbp)/3;
+    hr += Math.max(-15, dmap * -0.25);
     return {sbp,dbp,hr,rr};
   }
-  let sbp = randIn(d.sbp)*m.sbp*(dose/100);
-  let dbp = randIn(d.dbp)*m.dbp*(dose/100);
-  let hr  = randIn(d.hr)*m.hr*(dose/100);
-  let rr  = randIn(d.rr)*m.rr*(dose/100);
+
+  // 一般薬剤
+  let sbp = _emax(dose, mulP(d.sbp, mx.sbp));
+  let dbp = _emax(dose, mulP(d.dbp, mx.dbp));
+  let hr  = _emax(dose, mulP(d.hr,  mx.hr));
+  let rr  = _emax(dose, mulP(d.rr,  mx.rr));
   let late = null;
   if(d.late){
     const gBlock = !!(mod && mod.blockGanglion);
     const aBlock = !!(mod && mod.blockAdrenal);
     if(gBlock){ sbp=0; dbp=0; hr=0; rr=0; }
     late = {
-      sbp: randIn(d.late.sbp)*m.sbp*(dose/100)*(aBlock?0:1),
-      dbp: randIn(d.late.dbp)*m.dbp*(dose/100)*(aBlock?0:1),
-      hr:  randIn(d.late.hr)*m.hr*(dose/100)*(aBlock?0:1),
-      rr:  randIn(d.late.rr)*m.rr*(dose/100)*(aBlock?0:1)
+      sbp: gBlock?0 : _emax(dose, mulP(d.late.sbp, mx.sbp))*(aBlock?0:1),
+      dbp: gBlock?0 : _emax(dose, mulP(d.late.dbp, mx.dbp))*(aBlock?0:1),
+      hr:  gBlock?0 : _emax(dose, mulP(d.late.hr,  mx.hr)) *(aBlock?0:1),
+      rr:  gBlock?0 : _emax(dose, mulP(d.late.rr,  mx.rr)) *(aBlock?0:1)
     };
   }
+  // baroreflex: MAP↑ → HR↓（減衰のみ・最大-15にクランプ：直接β1変時作用を反転させない）
+  const dmap = (sbp + 2*dbp)/3;
+  hr += Math.max(-15, dmap * -0.25);
+  // フェントラミン投与後の Adr/NA は昇圧→降圧に逆転
   if(mod && mod.reversal){
     sbp = -Math.abs(sbp)*0.8;
     dbp = -Math.abs(dbp)*1.2;
     hr  = Math.abs(hr);
     if(late){ late.sbp = -Math.abs(late.sbp)*0.8; late.dbp = -Math.abs(late.dbp)*1.2; late.hr = Math.abs(late.hr); }
   }
+  // Emax で頭打ちなので追加 clamp 不要だが安全のため
+  sbp = Math.max(-80, Math.min(80, sbp));
+  dbp = Math.max(-60, Math.min(60, dbp));
+  hr  = Math.max(-60, Math.min(90, hr));
   return {sbp,dbp,hr,rr,late};
 }
 
@@ -615,7 +697,7 @@ function computeValues(t, baseline, events){
     // 高圧相では圧受容器反射で一過性徐脈、圧低下時はその抑制を解除してβ1頻脈を見せる
     const pressorExcess = Math.max(0, map - baselineMap);
     if(pressorExcess > 0.5){
-      const reflexBrady = Math.min(Math.max(18, baseline.hr * 0.45), pressorExcess * 0.95);
+      const reflexBrady = Math.min(Math.max(6, baseline.hr * 0.12), pressorExcess * 0.55);
       hr = Math.max(25, hr - reflexBrady);
     }else if(map < baselineMap - 4){
       const reflexRelease = Math.min(Math.max(8, baseline.hr * 0.22), (baselineMap - map) * 0.35);
@@ -680,7 +762,7 @@ function computeValues(t, baseline, events){
   sbp += noise.sbp;
   dbp += noise.dbp;
   rr  += noise.rr;
-  // 圧受容器反射（HR 偏移 → SBP 補正, 機序ベースの閉ループ）
+  // 圧受容器反射（HR 偏移 → MAP 補正, 機序ベースの閉ループ）
   sbp += baroreflexSBP(hr - baseline.hr);
   dbp += baroreflexSBP(hr - baseline.hr) * 0.7;
   return couplePressureToHeart(sbp, dbp, hr, rr);
@@ -694,7 +776,7 @@ const BASELINE_DEFAULTS = {sbp:120, dbp:80, hr:70, rr:16};
 function baseMapOf(b){ return b.dbp + (b.sbp-b.dbp)/3; }
 function applyBaselineDefaultsToUI(){
   const defs = BASELINE_DEFAULTS;
-  [['bSBP','sbp'],['bDBP','dbp'],['bHR','hr'],['bRR','rr']].forEach(([id,key])=>{
+  [['bMAP','map'],['bHR','hr'],['bRR','rr']].forEach(([id,key])=>{
     const el = document.getElementById(id);
     const out = document.getElementById('o'+id.slice(1));
     if(el) el.value = defs[key];
@@ -720,8 +802,14 @@ const data = { times:[], sbp:[], dbp:[], map:[], hr:[], rr:[], contrib:{} };
 const stats = {};
 
 function baselineFromUI(){
+  // ★V11: MAP入力に切替。SBP/DBPは内部計算用に逆算
+  const map = +document.getElementById('bMAP').value;
+  const pp = 40;
+  const dbp = Math.round((3*map - pp) / 3);
+  const sbp = dbp + pp;
   const b = {
-    sbp:+document.getElementById('bSBP').value,
+    sbp: sbp,
+    dbp: dbp,
     dbp:+document.getElementById('bDBP').value,
     hr:+document.getElementById('bHR').value,
     rr:+document.getElementById('bRR').value
@@ -853,7 +941,7 @@ function jumpToNextPhase(){
 }
 
 /* ベースライン・時間スライダー連動 */
-  [['bSBP','oSBP'],['bDBP','oDBP'],['bHR','oHR'],['bRR','oRR']].forEach(([id,out])=>{
+  [['bMAP','oMAP'],['bHR','oHR'],['bRR','oRR']].forEach(([id,out])=>{
   const el=document.getElementById(id), o=document.getElementById(out);
   el.addEventListener('input', ()=>{
     o.textContent=el.value;
@@ -1026,6 +1114,7 @@ bWtEl.addEventListener('input', ()=>{
 
 /* ---- 3つの全チャートにズーム・パン・クリック投与・ホバー数値追従をバインド ---- */
 function attachTimelineClick(chart){
+  if(chart.__bound) return; chart.__bound = true; // ★V10: 多重バインド防止
   chart.canvas.style.cursor='crosshair';
   let dragging = false, didDrag = false, startX = 0;
   const roId = chart.canvas.id;
@@ -1035,6 +1124,9 @@ function attachTimelineClick(chart){
     dragging = true; didDrag = false; startX = e.clientX;
   });
   window.addEventListener('mousemove', (e)=>{
+    if(chart.__mmRaf) return;
+    chart.__mmRaf = requestAnimationFrame(function(){
+      chart.__mmRaf = 0;
     if(dragging){
       if(Math.abs(e.clientX - startX) > 4){ didDrag = true; chart.canvas.style.cursor='grabbing'; }
       if(didDrag){
@@ -1087,6 +1179,9 @@ function attachTimelineClick(chart){
   });
   chart.canvas.addEventListener('click', (e)=>{
     if(didDrag) return;
+    const _now = Date.now();
+    if(chart.__lastClick && (_now - chart.__lastClick) < 120) return; // ★V10: 多重発火防止
+    chart.__lastClick = _now;
     // 投与は常に現在時刻（リアルタイム表示の最右端）に行う。クリック位置は無視
     scheduleDose(tlSel.value, Math.round(simTime));
   });
@@ -1106,7 +1201,8 @@ function attachTimelineClick(chart){
       // 通常ホイール＝そのグラフのY軸スケール変更（各バイタル独立・永続）
       yZoom(chart, e, dy < 0 ? 0.8 : 1.25);
     }
-  }, {passive:false});
+    });
+  }, {passive:true});
 }
 allCharts.forEach(attachTimelineClick);
 
@@ -1331,6 +1427,9 @@ function fullView(){
 
 /* ---- 投与（タイムライン共通のスケジュール関数） ---- */
 function scheduleDose(drug, T){
+  const _n = Date.now();
+  if(window.__lastDoseAt && (_n - window.__lastDoseAt) < 150) return; // ★V10: 多重投与防止（1クリック=1投与）
+  window.__lastDoseAt = _n;
   const d = DRUGS[drug];
   // 効果は「スライダー% × 倍率 × 体重連動係数」で、最大3倍相当に飽和（非現実的な過剰反応を防止）
   const perKg = DOSE[drug].perKg ? (bodyWeight / 70) : 1;
@@ -1355,7 +1454,8 @@ function scheduleDose(drug, T){
   }
   events.push({drug, t0:T, dose, doseLabel, onset:d.onset, peak:d.peak, dur:d.dur*durMult, late: amp.late?{onset:d.late.onset, peak:d.late.peak, dur:d.late.dur*durMult, sbp:amp.late.sbp, dbp:amp.late.dbp, hr:amp.late.hr, rr:amp.late.rr}:null, amp, tone});
   markers.push({t:T, label:drug, color:DRUG_COLORS[drug]||'#2f6fbf'});
-  logPush(drug, T, doseLabel, mod);
+  try{ logPush(drug, T, doseLabel, mod); }catch(err){ console.warn('logPush:', err); }
+  try{ recordLabDose(drug, T, doseLabel); }catch(err){ console.warn('recordLabDose:', err); }
   if(T < nextSample){
     rebuildData();
   }else{
@@ -1412,6 +1512,7 @@ function renderSchedList(){
 
 function logPush(drug, t, doseLabel, mod){
   const box = document.getElementById('logBox');
+  if(!box) return;
   const row = document.createElement('div');
   row.className = 'row';
   let extra = '';
@@ -1432,6 +1533,8 @@ function logPush(drug, t, doseLabel, mod){
 
 /* ---- シミュレーションループ ---- */
 function start(){
+  if(running) return; // ★V10: 二重ループ防止（再入ガード）
+
   running = true;
   lastFrame = performance.now();
   redrawDebt = 0;
@@ -1479,6 +1582,8 @@ function loop(now){
 }
 
 function updateCharts(){
+  updateLabPosts();
+  if(labDirty){ labDirty = false; renderLabTable(); }
   const dataMax = Math.max(WINDOW, simTime, data.times.length ? data.times[data.times.length-1] : 0);
   if(autoFollow && !userInteracted){
     // リアルタイム追従時は右端を「現在時刻+20秒」、幅は常にWINDOW(120秒)固定。
@@ -1514,9 +1619,15 @@ function updateCharts(){
   // ベースライン参照線は無効化済み
   // Y軸：表示ウィンドウ内の実データに合わせ自動スケール（Y固定・手動ズーム中はスキップ）
   allCharts.forEach(ch=>applyYPerChart(ch));
-  chartBP.update('none');
-  chartHR.update('none');
-  chartRR.update('none');
+  // ★ V9: 3 chart.update を 1 rAF に集約
+  if(!updateCharts.__raf){
+    updateCharts.__raf = requestAnimationFrame(function(){
+      updateCharts.__raf = 0;
+      try{ chartBP && chartBP.update('none'); }catch(_){}
+      try{ chartHR && chartHR.update('none'); }catch(_){}
+      try{ chartRR && chartRR.update('none'); }catch(_){}
+    });
+  }
   updateViewRange();
   updateReadoutsByTime(simTime);
   syncScrubber();
@@ -1956,6 +2067,159 @@ function renderTable(){
   });
 }
 
+/* ================= 実験ノート（投与前後ログ） ================= */
+const LAB_PARAMS = [
+  {key:'map', label:'MAP 平均血圧',   unit:'mmHg'},
+  {key:'hr',  label:'HR 心拍数',      unit:'回/分'},
+  {key:'rr',  label:'RR 呼吸数',      unit:'回/分'}
+];
+const LAB_POST_SEC = 180;   // 後値の基準時刻：最終投与から3分後
+const LAB_SET_WIN = 30;     // 連続投与セット判定：直前投与から30秒以内
+let labNotes = [];          // {drugs:[{drug,doseLabel,t0}], tFirst, tLast, pre:{}, post:{}, rate:{}, status:'measuring'|'done'}
+let labSet = null;
+let labDirty = false;
+
+function avgRange(key, t0, t1){
+  const times = data.times, arr = data[key];
+  let sum = 0, n = 0;
+  for(let i=0;i<times.length;i++){
+    const t = times[i];
+    if(t >= t0-1e-9 && t <= t1+1e-9){ sum += arr[i]; n++; }
+  }
+  return n ? sum/n : null;
+}
+function labValueAt(key, t){
+  const r = valueAtTime(key, t);
+  return (r && isFinite(r.v)) ? r.v : null;
+}
+function labPreValues(T){
+  const win = Math.min(60, Math.max(0, T));
+  const out = {};
+  ['sbp','dbp','map','hr','rr'].forEach(k=>{
+    const v = avgRange(k, T-win, T);
+    out[k] = (v !== null && isFinite(v)) ? v : baseline[k];
+  });
+  return out;
+}
+function recordLabDose(drug, T, doseLabel){
+  if(typeof labNotes === 'undefined'){ console.warn('labNotes not initialized'); return; }
+  if(labSet && T > labSet.tLast && (T - labSet.tLast) <= LAB_SET_WIN){
+    // 直前投与から30秒以内 → 同一セットとして連結
+    labSet.drugs.push({drug, doseLabel, t0:T});
+    labSet.tLast = T;
+  }else{
+    labSet = { drugs:[{drug, doseLabel, t0:T}], tFirst:T, tLast:T, pre:labPreValues(T), post:null, rate:null, status:'measuring' };
+    labNotes.push(labSet);
+    if(labNotes.length > 40) labNotes.splice(0, labNotes.length-40);
+  }
+  renderLabTable();
+}
+function updateLabPosts(){
+  if(!labNotes.length) return;
+  labNotes.forEach(note=>{
+    if(note.status !== 'measuring') return;
+    const endT = note.tLast + LAB_POST_SEC;
+    if(!data.times.length || data.times[data.times.length-1] < endT - 1e-9) return; // 3分未経過（測定中）
+    note.post = {}; note.rate = {};
+    ['sbp','dbp','map','hr','rr'].forEach(k=>{
+      const pv = labValueAt(k, endT);
+      note.post[k] = (pv !== null) ? pv : baseline[k];
+      note.rate[k] = note.pre[k] ? (note.post[k]-note.pre[k])/note.pre[k]*100 : 0;
+    });
+    note.status = 'done';
+    labDirty = true;
+  });
+}
+function renderLabTable(){
+  const tb = document.querySelector('#labTable tbody');
+  if(!tb) return;
+  updateLabPosts();
+  tb.innerHTML = '';
+  const summary = document.getElementById('labSummary');
+  if(!labNotes.length){
+    tb.innerHTML = '<tr><td colspan="7" style="color:#aab4bf;text-align:center">（投与記録なし — 薬物を投与すると自動で記録されます）</td></tr>';
+    if(summary) summary.textContent = '';
+    return;
+  }
+  let no = 0;
+  labNotes.slice().reverse().forEach(note=>{
+    no++;
+    const label = note.drugs.map(d=>d.drug+'（'+(DRUGS[d.drug]?DRUGS[d.drug].name:'')+'）'+d.doseLabel).join(' ＋ ');
+    const tRange = 't=' + note.tFirst.toFixed(0) + 's〜' + (note.tLast+LAB_POST_SEC).toFixed(0) + 's';
+    if(note.status === 'measuring'){
+      const tr = document.createElement('tr');
+      tr.className = 'lab-measuring';
+      tr.innerHTML = '<td>'+no+'</td><td>'+label+'<br><span style="color:#aab4bf;font-size:.7rem">'+tRange+'</span></td><td colspan="4" style="color:#e67e22;font-weight:700">⏳ 測定中（最終投与から3分経過待ち）…</td><td>—</td>';
+      tb.appendChild(tr);
+    }else{
+      LAB_PARAMS.forEach(p=>{
+        const pre = note.pre[p.key], post = note.post[p.key], rate = note.rate ? note.rate[p.key] : null;
+        const tr = document.createElement('tr');
+        tr.className = 'lab-done';
+        tr.innerHTML = '<td>'+no+'</td><td>'+label+'<br><span style="color:#aab4bf;font-size:.7rem">'+tRange+'</span></td><td>'+p.label+'</td>'
+          + '<td>'+(pre!=null?pre.toFixed(1):'—')+' '+p.unit+'</td>'
+          + '<td>'+(post!=null?post.toFixed(1):'—')+' '+p.unit+'</td>'
+          + '<td style="'+(rate>0?'color:#c0392b;font-weight:700':(rate<0?'color:#2e86c1;font-weight:700':''))+'">'+(rate!=null?(rate>=0?'+':'')+rate.toFixed(1):'—')+'</td>'
+          + '<td>✔</td>';
+        tb.appendChild(tr);
+      });
+    }
+  });
+  if(summary) summary.textContent = '記録セット数: '+labNotes.length+' ／ 完了: '+labNotes.filter(n=>n.status==='done').length+' ／ 測定中: '+labNotes.filter(n=>n.status==='measuring').length;
+}
+function labCSVText(){
+  const lines = [['No','投与薬物(セット)','パラメータ','投与前値','投与後値(3分)','変化率%','状態']];
+  let no = 0;
+  labNotes.slice().reverse().forEach(note=>{
+    no++;
+    const label = note.drugs.map(d=>d.drug+' '+d.doseLabel).join(' + ');
+    if(note.status === 'measuring'){
+      lines.push([no, label, '—', '—', '—', '—', '測定中']);
+    }else{
+      LAB_PARAMS.forEach(p=>{
+        lines.push([no, label, p.label,
+          (note.pre[p.key]!=null?note.pre[p.key].toFixed(1):''),
+          (note.post[p.key]!=null?note.post[p.key].toFixed(1):''),
+          (note.rate[p.key]!=null?note.rate[p.key].toFixed(1):''),
+          '完了']);
+      });
+    }
+  });
+  return '\uFEFF' + lines.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+}
+function flashLabMsg(msg){
+  const el = document.getElementById('labMsg');
+  if(!el) return;
+  el.textContent = msg;
+  clearTimeout(el._tm);
+  el._tm = setTimeout(()=>{ el.textContent=''; }, 2200);
+}
+function fallbackCopyCSV(t){
+  const ta = document.createElement('textarea');
+  ta.value = t;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try{ document.execCommand('copy'); flashLabMsg('コピーしました'); }
+  catch(e){ flashLabMsg('コピー失敗（手動で選択してください）'); }
+  ta.remove();
+}
+function labCopyCSV(){
+  const t = labCSVText();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(()=>flashLabMsg('コピーしました')).catch(()=>fallbackCopyCSV(t));
+  }else{ fallbackCopyCSV(t); }
+}
+function labDownloadCSV(){
+  const blob = new Blob([labCSVText()], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '実験ノート_投与前後ログ.csv';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 300);
+}
+
 /* ---- リセット ---- */
 function resetSim(keepDrugs){
   events=[]; markers=[]; simTime=0; nextSample=0; running=false; redrawDebt=0;
@@ -1985,6 +2249,8 @@ function resetSim(keepDrugs){
   document.getElementById('timeBox').textContent='0.0 秒';
   renderTable();
   renderSchedList();
+  labNotes.length = 0; labSet = null;
+  renderLabTable();
   syncScrubber(true);
   if(!keepDrugs){
     document.getElementById('logBox').innerHTML='<div class="row" style="color:#aab4bf">（未投与）</div>';
@@ -2009,7 +2275,7 @@ function setControls(){
   if(running){ btn.textContent='⏸ 一時停止'; btn.classList.add('running'); }
   else if(simTime>0){ btn.textContent='▶ 再開'; btn.classList.remove('running'); }
   else { btn.textContent='▶ 開始'; btn.classList.remove('running'); }
-  ['bSBP','bDBP','bHR','bRR','bWt'].forEach(id=>{
+  ['bMAP','bHR','bRR','bWt'].forEach(id=>{
     document.getElementById(id).disabled = running;
   });
   const sndBtn = document.getElementById('btnMonitorSound');
@@ -2019,6 +2285,9 @@ function setControls(){
 /* ---- イベント登録 ---- */
 document.getElementById('btnRun').addEventListener('click', toggle);
 document.getElementById('btnReset').addEventListener('click', fullReset);
+document.getElementById('btnLabCopy').addEventListener('click', labCopyCSV);
+document.getElementById('btnLabDl').addEventListener('click', labDownloadCSV);
+document.getElementById('btnLabClear').addEventListener('click', ()=>{ labNotes.length=0; labSet=null; renderLabTable(); flashLabMsg('ログをクリアしました'); });
 document.getElementById('btnMonitorSound').addEventListener('click', ()=>{ toggleMonitorSound(); });
 document.getElementById('monitorVolume').addEventListener('input', handleMonitorVolumeInput);
 document.querySelectorAll('.btn-speed').forEach(b=>{
@@ -2138,7 +2407,7 @@ updateViewRange();
 syncScrubber(true);
 const demoMode = new URLSearchParams(location.search).get('demo');
 if(demoMode === 'asystole'){
-  const pairs = [['bSBP','oSBP'],['bDBP','oDBP'],['bHR','oHR'],['bRR','oRR']];
+  const pairs = [['bMAP','oMAP'],['bHR','oHR'],['bRR','oRR']];
   pairs.forEach(([sid, oid])=>{
     const s = document.getElementById(sid), o = document.getElementById(oid);
     if(s) s.value = 0;
@@ -2165,7 +2434,7 @@ if(demoMode === 'asystole'){
     note.textContent = 'Hexデモ（低血圧でもHR高値にしない確認）';
     box.prepend(note);
   }
-  [['bSBP','oSBP',40],['bDBP','oDBP',20],['bHR','oHR',70],['bRR','oRR',16]].forEach(([sid,oid,val])=>{
+  [['bMAP','oMAP',93],['bHR','oHR',70],['bRR','oRR',16]].forEach(([sid,oid,val])=>{
     const s = document.getElementById(sid), o = document.getElementById(oid);
     if(s) s.value = val;
     if(o) o.textContent = String(val);
@@ -2180,6 +2449,7 @@ if(demoMode === 'asystole'){
 }
 updateReadoutsByTime(simTime); // 初期表示：大型デジタル表示にベースライン値を反映
 statusBadge();            // 初期表示：正常判定バッジ
+renderLabTable();         // 初期表示：実験ノート（空）
 handleMonitorVolumeInput();
 setMonitorButton();
 
@@ -2188,8 +2458,6 @@ function reportMeta(){
   const rows = [['項目','値']];
   rows.push(['対象薬剤', events.map(e=>e.drug+' '+(DRUGS[e.drug]?DRUGS[e.drug].name:'')).join('、') || '（未投与）']);
   rows.push(['体重', bodyWeight + ' kg']);
-  rows.push(['ベースライン SBP', baseline.sbp + ' mmHg']);
-  rows.push(['ベースライン DBP', baseline.dbp + ' mmHg']);
   rows.push(['ベースライン HR', baseline.hr + ' 回/分']);
   rows.push(['ベースライン RR', baseline.rr + ' 回/分']);
   rows.push(['シミュレーション実時間', simTime.toFixed(1) + ' 秒']);
@@ -2206,7 +2474,7 @@ function exportExcel(){
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(reportMeta()), '実験条件');
     // 生データ：各時刻のバイタルに加え「投与イベント」列を追加（どのタイミングで何を投与したか一目で分かる）
-    const aoa = [['時刻(秒)','SBP','DBP','MAP','HR','RR','投与イベント']];
+    const aoa = [['時刻(秒)','MAP','HR','RR','投与イベント']];
     const evMap = {};
     events.slice().sort((a,b)=>a.t0-b.t0).forEach(ev=>{
       const key = Math.round(ev.t0*10)/10;
